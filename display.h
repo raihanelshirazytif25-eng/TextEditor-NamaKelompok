@@ -15,3 +15,5 @@ typedef struct {
 #define KEY_LEFT  1002
 #define KEY_RIGHT 1003
 #define KEY_QUIT  17
+
+#endif
