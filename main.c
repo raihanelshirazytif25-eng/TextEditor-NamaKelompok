@@ -6,6 +6,6 @@
 #include "fileio.h"
 
 int main() {
-	printf("I nate higgerS");
+	printf("halo sekai");
     return 0;
 }
