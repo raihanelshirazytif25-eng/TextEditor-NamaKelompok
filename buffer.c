@@ -59,5 +59,17 @@ void mergeLines(int row){
 }
 
 void syncCursor(void){
-	
+	void syncCursor(void) {
+    if (ed.curRow < 0) ed.curRow = 0;
+    if (ed.curRow >= buf.totalLines) ed.curRow = buf.totalLines - 1;
+    int maxCol = buf.lineLen[ed.curRow];
+    if (ed.curCol < 0) ed.curCol = 0;
+    if (ed.curCol > maxCol) ed.curCol = maxCol;
+
+    if (ed.curRow < ed.viewRow) ed.viewRow = ed.curRow;
+    if (ed.curRow >= ed.viewRow + VISIBLE_ROWS) ed.viewRow = ed.curRow - VISIBLE_ROWS + 1;
+    
+    if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
+    if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
+        ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
 }
