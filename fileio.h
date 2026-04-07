@@ -2,8 +2,8 @@
 #define FILEIO_H
 
 int  checkFileStatus(const char *path);
-void openFile(void);
-void saveFile(void);
+int  openFile(const char *path);
+int  saveFile(const char *path);
 void autoSave(void);
 void exitManager(void);
 

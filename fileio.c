@@ -77,3 +77,14 @@ int saveFile(const char *path) {
     ed.lastSave = time(NULL);
     return 1;
 }
+
+void autoSave(void) {
+    if (!ed.modified || ed.filename[0] == '\0' || ed.readOnly) return;
+    if (difftime(time(NULL), ed.lastSave) >= AUTOSAVE_SEC) saveFile(ed.filename);
+}
+
+void exitManager(void) {
+    setTerminalMode(0);
+    clearTerminal();
+    printf("Editor ditutup.\n");
+}
