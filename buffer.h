@@ -11,7 +11,7 @@ void insertNewLine(int row, int col);
 
 void mergeLines(int row);
 
-void resizeBuffer(void);
+void deleteLine(int row);
 
 void syncCursor(void);
 
