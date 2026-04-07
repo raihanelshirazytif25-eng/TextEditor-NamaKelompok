@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <conio.h>
 
-/* Helper Internal */
+
 void moveCursorTo(int row, int col) {
     COORD c = {(SHORT)col, (SHORT)row};
     SetConsoleCursorPosition(ed.hConsole, c);
@@ -86,6 +86,21 @@ void drawLineNumbers(int screenRow, int bufRow) {
     resetColor();
 }
 
+void drawCurrentLine(void) {
+    CONSOLE_CURSOR_INFO cci;
+    GetConsoleCursorInfo(ed.hConsole, &cci);
+    cci.bVisible = FALSE;
+    SetConsoleCursorInfo(ed.hConsole, &cci);
+
+
+    drawRow(ed.curRow - ed.viewRow, ed.curRow);
+    drawStatusBar(); 
+
+    moveCursorTo(ed.curRow - ed.viewRow, LINE_NUM_WIDTH + (ed.curCol - ed.viewCol));
+    cci.bVisible = TRUE;
+    SetConsoleCursorInfo(ed.hConsole, &cci);
+}
+
 void drawStatusBar(void) {
     moveCursorTo(VISIBLE_ROWS, 0);
     setColor(0, 7);
@@ -122,6 +137,16 @@ void showPrompt(const char *msg, char *out, int maxLen) {
     }
     setTerminalMode(1); resetColor();
 }
+
+void clearTerminal(void) {
+    COORD coordScreen = {0, 0};
+    DWORD charsWritten;
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(ed.hConsole, &csbi);
+    DWORD dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
+    FillConsoleOutputCharacter(ed.hConsole, ' ', dwConSize, coordScreen, &charsWritten);
+    FillConsoleOutputAttribute(ed.hConsole, csbi.wAttributes, dwConSize, coordScreen, &charsWritten);
+    SetConsoleCursorPosition(ed.hConsole, coordScreen);
 
 void setTerminalMode(int raw) {
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
