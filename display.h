@@ -1,19 +1,14 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
-#include "buffer.h"  
-
-typedef struct {
-    int row;
-    int col;
-    int screen_rows;
-    int screen_cols;
-} Display;
-
-#define KEY_UP    1000
-#define KEY_DOWN  1001
-#define KEY_LEFT  1002
-#define KEY_RIGHT 1003
-#define KEY_QUIT  17
+void drawScreen(void);
+void drawCurrentLine(void); // Fungsi baru untuk optimasi
+void drawLineNumbers(int screenRow, int bufRow);
+void drawStatusBar(void);
+void handleNavigation(int key);
+void clearTerminal(void);
+void setTerminalMode(int raw);
+int  readKey(void);
+void showPrompt(const char *msg, char *out, int maxLen);
 
 #endif
