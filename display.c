@@ -101,9 +101,10 @@ void drawCurrentLine(void) {
 void drawStatusBar(void) {
     moveCursorTo(VISIBLE_ROWS, 0);
     setColor(0, 7);
-    char left[80], right[40], bar[VISIBLE_COLS + 1];
-    snprintf(left, 80, " %s%s%s ", ed.filename[0] ? ed.filename : "[Untitled]", ed.modified ? " [*]" : "", ed.readOnly ? " [RO]" : "");
-    snprintf(right, 40, " Ln %d, Col %d | ^S=Save ^Q=Quit ", ed.curRow+1, ed.curCol+1);
+    char left[100], right[60], bar[VISIBLE_COLS + 1];
+    long size = (ed.filename[0] != '\0') ? getFileSize(ed.filename) : 0;
+    snprintf(left, 100, " %s%s%s | %ld bytes ", ed.filename[0] ? ed.filename : "[Untitled]", ed.modified ? " [*]" : "", ed.readOnly ? " [RO]" : "", size);
+    snprintf(right, 60, " Ln %d, Col %d | ^S=Save ^R=Rename ^Q=Quit ", ed.curRow+1, ed.curCol+1);
     memset(bar, ' ', VISIBLE_COLS); bar[VISIBLE_COLS] = '\0';
     memcpy(bar, left, strlen(left));
     memcpy(bar + (VISIBLE_COLS - strlen(right)), right, strlen(right));

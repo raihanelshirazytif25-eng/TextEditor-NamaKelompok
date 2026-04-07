@@ -32,7 +32,7 @@ void deleteCharAt(int row, int col) {
     ed.modified = 1;
 }
 
-void insertNewLine(int row, int col) {
+int insertNewLine(int row, int col) {
     if (buf.totalLines >= MAX_ROWS || row < 0 || row >= buf.totalLines) return 0;
     for (int i = buf.totalLines; i > row + 1; i--) {
         memcpy(buf.data[i], buf.data[i - 1], buf.lineLen[i - 1] + 1);
@@ -49,7 +49,7 @@ void insertNewLine(int row, int col) {
     return 1;
 }
 
-void mergeLines(int row){
+int mergeLines(int row){
     if (row < 0 || row >= buf.totalLines - 1) return 0;
     int lenA = buf.lineLen[row];
     int lenB = buf.lineLen[row + 1];
