@@ -13,6 +13,7 @@ Order=0,1,2,3,7,4,5,6
 Focused=5
 [Editor_0]
 <<<<<<< HEAD
+<<<<<<< HEAD
 CursorCol=5
 CursorRow=71
 TopLine=49
@@ -21,6 +22,11 @@ CursorCol=1
 CursorRow=1
 TopLine=22
 >>>>>>> 219e1902025aed4d3c9501df944f732cf041a5de
+=======
+CursorCol=2
+CursorRow=58
+TopLine=42
+>>>>>>> buffer
 LeftChar=1
 [Editor_1]
 CursorCol=38
