@@ -1,4 +1,4 @@
-﻿#include "editor.h"
+#include "editor.h"
 #include "buffer.h"
 #include <string.h>
 
@@ -59,6 +59,7 @@ void mergeLines(int row){
 }
 
 void syncCursor(void){
+<<<<<<< HEAD
 	void syncCursor(void) {
     if (ed.curRow < 0) ed.curRow = 0;
     if (ed.curRow >= buf.totalLines) ed.curRow = buf.totalLines - 1;
@@ -73,3 +74,7 @@ void syncCursor(void){
     if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
         ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
 }
+=======
+	
+}
+>>>>>>> 219e1902025aed4d3c9501df944f732cf041a5de
