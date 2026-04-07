@@ -1,9 +1,10 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 
-void saveFile(void);
-void saveAsFile(void);
 void openFile(void);
-void exitManager(void);
+void saveFile(void);
+void parseToBuffer(const char *raw, int rawLen);
+int  checkFileStatus(const char *path);
+int  flattenBuffer(char **out, int *outLen);
 
-#endif
+#endif //TEXTEDITOR_NAMAKELOMPOK_FILEIO_H

@@ -1,4 +1,4 @@
-﻿#include "editor.h"
+#include "editor.h"
 #include "buffer.h"
 #include <string.h>
 
