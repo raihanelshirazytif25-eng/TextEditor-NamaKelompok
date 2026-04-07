@@ -88,3 +88,37 @@ void exitManager(void) {
     clearTerminal();
     printf("Editor ditutup.\n");
 }
+
+long getFileSize(const char *path) {
+    if (!path || path[0] == '\0') return 0;
+    FILE *fp = fopen(path, "rb");
+    if (!fp) return 0;
+    fseek(fp, 0, SEEK_END);
+    long size = ftell(fp);
+    fclose(fp);
+    return (size < 0) ? 0 : size;
+}
+
+int saveAsFile(const char *newPath) {
+    if (!newPath || newPath[0] == '\0') return 0;
+    FILE *fp = fopen(newPath, "wb");
+    if (!fp) return 0;
+    fclose(fp); 
+    strncpy(ed.filename, newPath, sizeof(ed.filename) - 1);
+    ed.filename[sizeof(ed.filename) - 1] = '\0';
+    ed.readOnly = 0; 
+    return saveFile(ed.filename);
+}
+
+int renameCurrentFile(const char *newPath) {
+    if (ed.filename[0] == '\0' || !newPath || newPath[0] == '\0') return 0;
+    if (ed.modified) {
+        if (!saveFile(ed.filename)) return 0;
+    }
+    if (rename(ed.filename, newPath) == 0) {
+        strncpy(ed.filename, newPath, sizeof(ed.filename) - 1);
+        ed.filename[sizeof(ed.filename) - 1] = '\0';
+        return 1;
+    }
+    return 0; 
+}
