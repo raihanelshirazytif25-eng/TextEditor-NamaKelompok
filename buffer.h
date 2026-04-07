@@ -3,15 +3,13 @@
 
 void initBuffer(void);
 
-void resetBuffer(void);
-
 void insertCharAt(int row, int col, char c);
 
 void deleteCharAt(int row, int col);
 
-void insertNewLine(int row, int col);
+int insertNewLine(int row, int col);
 
-void mergeLines(int row);
+int mergeLines(int row);
 
 void syncCursor(void);
 
