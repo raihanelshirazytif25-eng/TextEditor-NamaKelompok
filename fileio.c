@@ -43,3 +43,25 @@ void parseToBuffer(const char *raw, int rawLen) {
     buf.lineLen[row] = col; buf.data[row][col] = '\0';
     buf.totalLines = (row == 0 && col == 0) ? 1 : row + 1;
 }
+
+int openFile(const char *path) {
+    if (!path || path[0] == '\0') return 0;
+    int status = checkFileStatus(path);
+    if (status == -1) {
+        initBuffer();
+        strncpy(ed.filename, path, sizeof(ed.filename) - 1);
+        ed.modified = 0; ed.readOnly = 0;
+        return 1;
+    }
+    ed.readOnly = (status == 2) ? 1 : 0;
+    FILE *fp = fopen(path, "rb");
+    if (!fp) return 0;
+    fseek(fp, 0, SEEK_END);
+    long size = ftell(fp);
+    rewind(fp);
+    if (size <= 0) {
+        fclose(fp); initBuffer();
+        strncpy(ed.filename, path, sizeof(ed.filename) - 1);
+        ed.modified = 0; return 1;
+    }
+}
