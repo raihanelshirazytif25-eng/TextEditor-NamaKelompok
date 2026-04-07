@@ -31,6 +31,32 @@ void handleNavigation(int key) {
     syncCursor();
 }
 
+void drawRow(int screenRow, int bufRow) {
+    moveCursorTo(screenRow, 0);
+
+    if (bufRow >= buf.totalLines) {
+        setColor(8, 0); printf("    ~ "); resetColor();
+        COORD pos = {LINE_NUM_WIDTH, (SHORT)screenRow}; DWORD written;
+        FillConsoleOutputCharacter(ed.hConsole, ' ', VISIBLE_COLS - LINE_NUM_WIDTH, pos, &written);
+        return;
+    }
+
+    drawLineNumbers(screenRow, bufRow);
+    moveCursorTo(screenRow, LINE_NUM_WIDTH);
+    setColor(7, 0);
+
+    for (int c = 0; c < VISIBLE_COLS - LINE_NUM_WIDTH; c++) {
+        int idx = ed.viewCol + c;
+        if (idx < buf.lineLen[bufRow]) {
+            char ch = buf.data[bufRow][idx];
+            putchar(ch >= 32 && ch < 127 ? ch : ' ');
+        } else {
+            putchar(' ');
+        }
+    }
+    resetColor();
+}
+
 void drawScreen(void) {
     CONSOLE_CURSOR_INFO cci;
     GetConsoleCursorInfo(ed.hConsole, &cci);
