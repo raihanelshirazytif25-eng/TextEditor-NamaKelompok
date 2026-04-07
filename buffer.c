@@ -50,17 +50,23 @@ void insertNewLine(int row, int col) {
     ed.modified = 1;
 }
 
-void resizeBuffer(void){
-	
-}
-
 void mergeLines(int row){
-	
+    if (row < 0 || row >= buf.totalLines - 1) return;
+    int lenA = buf.lineLen[row];
+    int lenB = buf.lineLen[row + 1];
+    if (lenA + lenB >= MAX_COLS) return;
+    memcpy(&buf.data[row][lenA], buf.data[row + 1], lenB);
+    buf.lineLen[row] = lenA + lenB;
+    buf.data[row][buf.lineLen[row]] = '\0';
+    for (int i = row + 1; i < buf.totalLines - 1; i++) {
+        memcpy(buf.data[i], buf.data[i + 1], buf.lineLen[i + 1] + 1);
+        buf.lineLen[i] = buf.lineLen[i + 1];
+    }
+    buf.totalLines--;
+    ed.modified = 1;
 }
 
 void syncCursor(void){
-<<<<<<< HEAD
-	void syncCursor(void) {
     if (ed.curRow < 0) ed.curRow = 0;
     if (ed.curRow >= buf.totalLines) ed.curRow = buf.totalLines - 1;
     int maxCol = buf.lineLen[ed.curRow];
@@ -72,9 +78,6 @@ void syncCursor(void){
     
     if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
     if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
-        ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
+		ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
 }
-=======
-	
-}
->>>>>>> 219e1902025aed4d3c9501df944f732cf041a5de
+

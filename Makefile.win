@@ -12,7 +12,7 @@ CXXINCS  = -I"C:/Program Files (x86)/Embarcadero/Dev-Cpp/TDM-GCC-64/include" -I"
 BIN      = NamaKelompok.exe
 CXXFLAGS = $(CXXINCS) -std=c99
 CFLAGS   = $(INCS) -std=c99
-DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\devcpp.exe INTERNAL_DEL
+DEL      = C:\Program Files (x86)\Embarcadero\Dev-Cpp\DevCpp.exe INTERNAL_DEL
 
 .PHONY: all all-before all-after clean clean-custom
 
