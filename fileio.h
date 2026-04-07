@@ -1,8 +1,10 @@
-﻿//
-// Created by ADVAN on 10/03/2026.
-//
+#ifndef FILEIO_H
+#define FILEIO_H
 
-#ifndef TEXTEDITOR_NAMAKELOMPOK_FILEIO_H
-#define TEXTEDITOR_NAMAKELOMPOK_FILEIO_H
+void openFile(void);
+void saveFile(void);
+void parseToBuffer(const char *raw, int rawLen);
+int  checkFileStatus(const char *path);
+int  flattenBuffer(char **out, int *outLen);
 
 #endif //TEXTEDITOR_NAMAKELOMPOK_FILEIO_H
