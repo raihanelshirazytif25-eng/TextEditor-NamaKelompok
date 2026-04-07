@@ -3,7 +3,6 @@
 #include <string.h>
 
 void initBuffer(void){
-	memset(&buf, 0, sizeof(buf));
     buf.totalLines  = 1;
     buf.lineLen[0]  = 0;
     buf.data[0][0]  = '\0';	
