@@ -11,8 +11,6 @@ void insertNewLine(int row, int col);
 
 void mergeLines(int row);
 
-void deleteLine(int row);
-
 void syncCursor(void);
 
 #endif //TEXTEDITOR_NAMAKELOMPOK_BUFFER_H

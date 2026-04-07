@@ -50,12 +50,8 @@ void insertNewLine(int row, int col) {
     ed.modified = 1;
 }
 
-void resizeBuffer(void){
-	
-}
-
 void mergeLines(int row){
-	if (row < 0 || row >= buf.totalLines - 1) return;
+    if (row < 0 || row >= buf.totalLines - 1) return;
     int lenA = buf.lineLen[row];
     int lenB = buf.lineLen[row + 1];
     if (lenA + lenB >= MAX_COLS) return;
@@ -82,22 +78,6 @@ void syncCursor(void){
     
     if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
     if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
-        ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
+		ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
 }
 
-void deleteLine(int row){
-	if (row < 0 || row >= buf.totalLines) return;
-
-    if (buf.totalLines == 1) {
-        buf.lineLen[0] = 0;
-        buf.data[0][0] = '\0';
-    } else {
-        for (int i = row; i < buf.totalLines - 1; i++) {
-            memcpy(buf.data[i], buf.data[i + 1], buf.lineLen[i + 1] + 1);
-            buf.lineLen[i] = buf.lineLen[i + 1];
-        }
-        buf.totalLines--;
-    }
-    
-    ed.modified = 1;
-}
