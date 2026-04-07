@@ -65,3 +65,16 @@ int openFile(const char *path) {
         ed.modified = 0; return 1;
     }
 }
+
+int saveFile(const char *path) {
+    if (!path || path[0] == '\0' || ed.readOnly) return 0;
+    char *flat = NULL; int flatLen = 0;
+    if (!flattenBuffer(&flat, &flatLen)) return 0;
+    FILE *fp = fopen(path, "wb");
+    if (!fp) { free(flat); return 0; }
+    fwrite(flat, 1, flatLen, fp);
+    fclose(fp); free(flat);
+    ed.modified = 0; ed.lastSave = time(NULL);
+    return 1;
+}
+
