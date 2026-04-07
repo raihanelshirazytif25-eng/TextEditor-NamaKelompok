@@ -4,6 +4,7 @@
 #include <conio.h>
 #include <windows.h>
 
+#include "editor.h"
 #include "display.h"
 #include "buffer.h"
 #include <stdio.h>
@@ -147,6 +148,7 @@ void clearTerminal(void) {
     FillConsoleOutputCharacter(ed.hConsole, ' ', dwConSize, coordScreen, &charsWritten);
     FillConsoleOutputAttribute(ed.hConsole, csbi.wAttributes, dwConSize, coordScreen, &charsWritten);
     SetConsoleCursorPosition(ed.hConsole, coordScreen);
+}
 
 void setTerminalMode(int raw) {
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
@@ -157,4 +159,5 @@ void setTerminalMode(int raw) {
         SetConsoleMode(hIn, ed.oldConsoleMode);
     }
 }
+
 
