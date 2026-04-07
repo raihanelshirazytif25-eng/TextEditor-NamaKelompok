@@ -1,4 +1,4 @@
-﻿#include "editor.h"
+#include "editor.h"
 #include "display.h"
 #include "buffer.h"
 #include <stdio.h>
