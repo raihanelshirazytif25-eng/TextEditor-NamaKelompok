@@ -31,6 +31,44 @@ void handleNavigation(int key) {
     syncCursor();
 }
 
+void drawScreen(void) {
+    CONSOLE_CURSOR_INFO cci;
+    GetConsoleCursorInfo(ed.hConsole, &cci);
+    cci.bVisible = FALSE;
+    SetConsoleCursorInfo(ed.hConsole, &cci);
+
+    for (int sr = 0; sr < VISIBLE_ROWS; sr++) {
+        drawRow(sr, ed.viewRow + sr);
+    }
+
+    drawStatusBar();
+    moveCursorTo(ed.curRow - ed.viewRow, LINE_NUM_WIDTH + (ed.curCol - ed.viewCol));
+    cci.bVisible = TRUE;
+    SetConsoleCursorInfo(ed.hConsole, &cci);
+}
+
+void drawLineNumbers(int screenRow, int bufRow) {
+    moveCursorTo(screenRow, 0);
+    if (bufRow == ed.curRow) setColor(15, 0);
+    else setColor(8, 0);
+    printf("%4d ", bufRow + 1);
+    resetColor();
+}
+
+void drawStatusBar(void) {
+    moveCursorTo(VISIBLE_ROWS, 0);
+    setColor(0, 7);
+    char left[80], right[40], bar[VISIBLE_COLS + 1];
+    snprintf(left, 80, " %s%s%s ", ed.filename[0] ? ed.filename : "[Untitled]", ed.modified ? " [*]" : "", ed.readOnly ? " [RO]" : "");
+    snprintf(right, 40, " Ln %d, Col %d | ^S=Save ^Q=Quit ", ed.curRow+1, ed.curCol+1);
+    memset(bar, ' ', VISIBLE_COLS); bar[VISIBLE_COLS] = '\0';
+    memcpy(bar, left, strlen(left));
+    memcpy(bar + (VISIBLE_COLS - strlen(right)), right, strlen(right));
+    printf("%.*s", VISIBLE_COLS, bar);
+    resetColor();
+}
+
+
 int readKey(void) {
     int c = _getch();
     if (c == 0 || c == 224) {
@@ -42,3 +80,25 @@ int readKey(void) {
     }
     return c;
 }
+
+void showPrompt(const char *msg, char *out, int maxLen) {
+    moveCursorTo(VISIBLE_ROWS, 0);
+    setColor(0, 11); printf("%-*s", VISIBLE_COLS, msg);
+    moveCursorTo(VISIBLE_ROWS, (int)strlen(msg));
+    setTerminalMode(0);
+    if (fgets(out, maxLen, stdin)) {
+        out[strcspn(out, "\n")] = 0;
+    }
+    setTerminalMode(1); resetColor();
+}
+
+void setTerminalMode(int raw) {
+    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
+    if (raw) {
+        GetConsoleMode(hIn, &ed.oldConsoleMode);
+        SetConsoleMode(hIn, ed.oldConsoleMode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT));
+    } else {
+        SetConsoleMode(hIn, ed.oldConsoleMode);
+    }
+}
+
