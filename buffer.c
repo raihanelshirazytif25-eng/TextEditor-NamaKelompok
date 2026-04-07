@@ -9,10 +9,18 @@ void initBuffer(void){
     buf.data[0][0]  = '\0';	
 }
 
-void insertCharAt(int row, int col, char c) {
+void resetBuffer(void){
+	for (int i = 0; i < buf.totalLines; i++){
+        buf.lineLen[i] = 0;
+        buf.data[i][0] = '\0';
+    }
+    buf.totalLines = 1;
+}
+
+void insertCharAt(int row, int col, char c){
     if (row < 0 || row >= buf.totalLines) return;
     if (col < 0 || col > buf.lineLen[row]) return;
-    if (buf.lineLen[row] >= MAX_COLS - 1) {
+    if (buf.lineLen[row] >= MAX_COLS - 1){
         resizeBuffer();
         return;
     }
