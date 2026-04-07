@@ -3,6 +3,8 @@
 
 void initBuffer(void);
 
+void resetBuffer(void);
+
 void insertCharAt(int row, int col, char c);
 
 void deleteCharAt(int row, int col);
