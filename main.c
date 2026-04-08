@@ -105,10 +105,12 @@ int main(int argc, char *argv[]){
             }
             syncCursor();
         }
-
+       
+        int structureChanged = (key == 13 || key == 8 || key == 1010);//adding ts for easier life
+        
         //management render
-        if (ed.viewRow != oldViewRow){
-            drawScreen(); //render all text only when scroll up and down
+        if (ed.viewRow != oldViewRow || structureChanged){//adding this, so every backspace/enter/delete, so it will render all, and yes, it will cause the lag again damnit
+            drawScreen(); //render all text only when scroll up and down //newupdate, render all if you enter backspace/enter/daleted
         }else{
             drawCurrentLine(); //not scroll up and down? render only 1 row 
         }
