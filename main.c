@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "editor.h"
 #include "display.h"
 #include "buffer.h"
 #include "fileio.h"
