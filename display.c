@@ -103,7 +103,7 @@ void drawCurrentLine(void) {
 
 void drawStatusBar(void) {
     moveCursorTo(VISIBLE_ROWS, 0);
-    setColor(0, 7);
+    setColor(7, 0);
     char left[80], right[40], bar[VISIBLE_COLS + 1];
     snprintf(left, 80, " %s%s%s ", ed.filename[0] ? ed.filename : "[Untitled]", ed.modified ? " [*]" : "", ed.readOnly ? " [RO]" : "");
     snprintf(right, 40, " Ln %d, Col %d | ^S=Save ^Q=Quit ", ed.curRow+1, ed.curCol+1);
