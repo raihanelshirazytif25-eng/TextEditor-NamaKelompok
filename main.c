@@ -16,7 +16,11 @@ int main(int argc, char *argv[]){
     
     SMALL_RECT windowSize = {0, 0, VISIBLE_COLS - 1, STATUS_BAR_ROW};
     SetConsoleWindowInfo(ed.hConsole, TRUE, &windowSize);
-
+	HWND hwnd = GetConsoleWindow();
+	DWORD style = GetWindowLong(hwnd, GWL_STYLE);
+    style &= ~WS_SIZEBOX;      
+    style &= ~WS_MAXIMIZEBOX;  
+    SetWindowLong(hwnd, GWL_STYLE, style);
     ed.lastSave = time(NULL);
     initBuffer();
 
