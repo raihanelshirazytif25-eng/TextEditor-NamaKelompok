@@ -10,7 +10,6 @@
 #define VISIBLE_ROWS    22
 #define VISIBLE_COLS    80
 #define LINE_NUM_WIDTH  5
-#define AUTOSAVE_SEC    30
 #define STATUS_BAR_ROW  24
 
 typedef struct {

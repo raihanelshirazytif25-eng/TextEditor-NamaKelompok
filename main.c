@@ -35,7 +35,6 @@ int main(int argc, char *argv[]){
 
     int running = 1;
     while (running){
-        autoSave();
         
         int key = readKey();
         if (key == -1) continue;
