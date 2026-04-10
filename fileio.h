@@ -1,23 +1,12 @@
-﻿#ifndef TEXTEDITOR_NAMAKELOMPOK_FILEIO_H
-#define TEXTEDITOR_NAMAKELOMPOK_FILEIO_H
+#ifndef FILEIO_H
+#define FILEIO_H
 
-#include <stdio.h>
-
-#ifndef MAX_COLS
-#define MAX_COLS 1024
-#endif
-
-extern char **buffer2D;
-extern int max_lines;
-extern int num_lines;
-extern int cx;
-extern int cy;
-extern int row_offset;
-extern char current_filename[256];
-
-void saveFile(void);
-void saveAsFile(void);
-void openFile(void);
+int  checkFileStatus(const char *path);
+int  openFile(const char *path);
+int  saveFile(const char *path);
 void exitManager(void);
+long getFileSize(const char *path); //nunjukin ukuran file
+int saveAsFile(const char *newPath); //simpen buffer saat ini di file baru
+int renameCurrentFile(const char *newPath); //ganti nama file
 
 #endif //TEXTEDITOR_NAMAKELOMPOK_FILEIO_H
