@@ -22,7 +22,7 @@ void insertCharAt(int row, int col, char c){
     ed.modified = 1;
 }
 
-void deleteCharAt(int row, int col) {
+void deleteCharAt(int row, int col){
     if (row < 0 || row >= buf.totalLines) return;
     if (col < 0 || col >= buf.lineLen[row]) return;
     int len = buf.lineLen[row];
@@ -32,9 +32,9 @@ void deleteCharAt(int row, int col) {
     ed.modified = 1;
 }
 
-int insertNewLine(int row, int col) {
+int insertNewLine(int row, int col){
     if (buf.totalLines >= MAX_ROWS || row < 0 || row >= buf.totalLines) return 0;
-    for (int i = buf.totalLines; i > row + 1; i--) {
+    for (int i = buf.totalLines; i > row + 1; i--){
         memcpy(buf.data[i], buf.data[i - 1], buf.lineLen[i - 1] + 1);
         buf.lineLen[i] = buf.lineLen[i - 1];
     }
@@ -57,7 +57,7 @@ int mergeLines(int row){
     memcpy(&buf.data[row][lenA], buf.data[row + 1], lenB);
     buf.lineLen[row] = lenA + lenB;
     buf.data[row][buf.lineLen[row]] = '\0';
-    for (int i = row + 1; i < buf.totalLines - 1; i++) {
+    for (int i = row + 1; i < buf.totalLines - 1; i++){
         memcpy(buf.data[i], buf.data[i + 1], buf.lineLen[i + 1] + 1);
         buf.lineLen[i] = buf.lineLen[i + 1];
     }
@@ -66,18 +66,24 @@ int mergeLines(int row){
     return 1;
 }
 
-void syncCursor(void){
+//memecah syncCursor menjadi dua for being modular able
+void validateCursor(void){
     if (ed.curRow < 0) ed.curRow = 0;
     if (ed.curRow >= buf.totalLines) ed.curRow = buf.totalLines - 1;
+    
     int maxCol = buf.lineLen[ed.curRow];
     if (ed.curCol < 0) ed.curCol = 0;
     if (ed.curCol > maxCol) ed.curCol = maxCol;
-
-    if (ed.curRow < ed.viewRow) ed.viewRow = ed.curRow;
-    if (ed.curRow >= ed.viewRow + VISIBLE_ROWS) ed.viewRow = ed.curRow - VISIBLE_ROWS + 1;
-    
-    if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
-    if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
-		ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
 }
 
+void scrollView(void){
+    //vertical scroll
+    if (ed.curRow < ed.viewRow) ed.viewRow = ed.curRow;
+    if (ed.curRow >= ed.viewRow + VISIBLE_ROWS) 
+        ed.viewRow = ed.curRow - VISIBLE_ROWS + 1;
+    
+    //horizontal scroll
+    if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
+    if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
+        ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
+}

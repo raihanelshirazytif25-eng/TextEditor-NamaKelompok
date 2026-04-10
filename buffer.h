@@ -11,6 +11,8 @@ int insertNewLine(int row, int col);
 
 int mergeLines(int row);
 
-void syncCursor(void);
+void validateCursor(void);
+
+void scrollView(void);
 
 #endif //TEXTEDITOR_NAMAKELOMPOK_BUFFER_H
