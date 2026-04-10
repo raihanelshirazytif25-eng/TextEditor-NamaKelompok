@@ -101,7 +101,7 @@ void drawCurrentLine(void) {
 
 void drawStatusBar(void) {
     moveCursorTo(VISIBLE_ROWS, 0);
-    setColor(0, 7);
+    setColor(7, 0);
     char left[100], right[60], bar[VISIBLE_COLS + 1];
     long size = (ed.filename[0] != '\0') ? getFileSize(ed.filename) : 0;
     snprintf(left, 100, " %s%s%s | %ld bytes ", ed.filename[0] ? ed.filename : "[Untitled]", ed.modified ? " [*]" : "", ed.readOnly ? " [RO]" : "", size);
