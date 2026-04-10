@@ -52,7 +52,8 @@ int main(int argc, char *argv[]){
                 //UI doesnt give a reaction if buffer rejected merge
                 mergeLines(ed.curRow); 
             }
-            syncCursor(); 
+            validateCursor();
+            scrollView();
         }
         else if (key == 17){
             running = 0; 
@@ -83,7 +84,8 @@ int main(int argc, char *argv[]){
                 ed.curRow++; 
                 ed.curCol = 0; 
             }
-            syncCursor(); 
+            validateCursor();
+            scrollView();
         }
         else if (key == 8){
             if (ed.curCol > 0){ 
@@ -97,7 +99,8 @@ int main(int argc, char *argv[]){
                     ed.curCol = prevLen; 
                 }
             }
-            syncCursor(); 
+            validateCursor();
+            scrollView();
         }
         else if (key >= 32 && key <= 126){
             int oldLen = buf.lineLen[ed.curRow];
@@ -106,7 +109,8 @@ int main(int argc, char *argv[]){
             if (buf.lineLen[ed.curRow] > oldLen){
                 ed.curCol++; 
             }
-            syncCursor();
+            validateCursor();
+            scrollView();
         }
        
         int structureChanged = (key == 13 || key == 8 || key == 1010);//adding ts for easier life

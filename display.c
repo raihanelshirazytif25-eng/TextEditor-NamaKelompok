@@ -30,7 +30,8 @@ void handleNavigation(int key) {
         case 1004: ed.curCol = 0; break;
         case 1005: ed.curCol = buf.lineLen[ed.curRow]; break;
     }
-    syncCursor();
+    validateCursor();
+    scrollView();
 }
 
 void drawRow(int screenRow, int bufRow) {
