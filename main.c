@@ -1,4 +1,3 @@
-#include "editor.h"
 #include "buffer.h"
 #include "fileio.h"
 #include "display.h"
@@ -6,7 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 //global file from editor.h
-Buffer buf;
 Editor ed;
 
 
