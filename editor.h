@@ -1,38 +1,40 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <windows.h>
-#include <time.h>
 #include <stdio.h>
 
-#define MAX_ROWS        1024
-#define MAX_COLS        512
 #define VISIBLE_ROWS    22
 #define VISIBLE_COLS    80
 #define LINE_NUM_WIDTH  5
 #define STATUS_BAR_ROW  24
 
-typedef struct {
-    char  data[MAX_ROWS][MAX_COLS];
-    int   lineLen[MAX_ROWS];
-    int   totalLines;
-} Buffer;
+typedef struct LineText{
+    char  *data;
+    int   lineLen;
+    int   memCap;
+    struct LineText *prev;
+    struct LineText *next;
+} LineText;
 
 typedef struct {
+	LineText *head;
+	LineText *tail;
+	
+	LineText *curNode;
+	LineText *viewNode;
+	
     int   curRow;
     int   curCol;
     int   viewRow;
     int   viewCol;
+    
     int   modified;
+    int   totalLines;
     char  filename[260];
-    time_t lastSave;
-    int   readOnly;
-    HANDLE hConsole;
-    CONSOLE_SCREEN_BUFFER_INFO cbi;
-    DWORD  oldConsoleMode;
+    
 } Editor;
 
-extern Buffer buf;
+extern LineText lt;
 extern Editor ed;
 
 #endif
