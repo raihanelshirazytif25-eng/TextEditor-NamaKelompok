@@ -6,6 +6,7 @@
 #include "editor.h"
 #include "display.h"
 #include "buffer.h"
+#include "fileio.h"
 
 void moveCursorTo(int row, int col) {
     COORD c = {(SHORT)col, (SHORT)row};
