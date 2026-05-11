@@ -1,12 +1,14 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 
+#include "buffer.h"
+
 int  checkFileStatus(const char *path);
 int  openFile(const char *path);
 int  saveFile(const char *path);
 void exitManager(void);
-long getFileSize(const char *path); //nunjukin ukuran file
-int saveAsFile(const char *newPath); //simpen buffer saat ini di file baru
-int renameCurrentFile(const char *newPath); //ganti nama file
+long getFileSize(const char *path); 
+int saveAsFile(const char *newPath); 
+int renameCurrentFile(const char *newPath); 
 
-#endif //TEXTEDITOR_NAMAKELOMPOK_FILEIO_H
+#endif 
