@@ -2,7 +2,7 @@
 #define DISPLAY_H
 
 void drawScreen(void);
-void drawCurrentLine(void); // Fungsi baru untuk optimasi
+void drawCurrentLine(void); 
 void drawLineNumbers(int screenRow, int bufRow);
 void drawStatusBar(void);
 void handleNavigation(int key);

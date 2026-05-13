@@ -3,7 +3,6 @@
 #include <string.h>
 #include <conio.h>
 #include <windows.h>
-#include "editor.h"
 #include "display.h"
 #include "buffer.h"
 #include "fileio.h"
@@ -106,7 +105,7 @@ void drawStatusBar(void) {
     char left[100], right[60], bar[VISIBLE_COLS + 1];
     long size = (ed.filename[0] != '\0') ? getFileSize(ed.filename) : 0;
     snprintf(left, 100, " %s%s%s | %ld bytes ", ed.filename[0] ? ed.filename : "[Untitled]", ed.modified ? " [*]" : "", ed.readOnly ? " [RO]" : "", size);
-    snprintf(right, 60, " Ln %d, Col %d | ^S=Save ^R=Rename ^Q=Quit ", ed.curRow+1, ed.curCol+1);
+    snprintf(right, 60, " Ln %d, Col %d | ^O=Open ^S=Save ^R=Rename ^Q=Quit ", ed.curRow+1, ed.curCol+1);
     memset(bar, ' ', VISIBLE_COLS); bar[VISIBLE_COLS] = '\0';
     memcpy(bar, left, strlen(left));
     memcpy(bar + (VISIBLE_COLS - strlen(right)), right, strlen(right));

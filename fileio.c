@@ -1,4 +1,3 @@
-#include "editor.h"
 #include "fileio.h"
 #include "buffer.h"
 #include "display.h"
@@ -73,8 +72,7 @@ int saveFile(const char *path) {
         }
     }
     fclose(fp);
-    ed.modified = 0; 
-    ed.lastSave = time(NULL);
+    ed.modified = 0;
     return 1;
 }
 
@@ -110,6 +108,7 @@ int renameCurrentFile(const char *newPath) {
     if (ed.modified) {
         if (!saveFile(ed.filename)) return 0;
     }
+    remove(newPath);
     if (rename(ed.filename, newPath) == 0) {
         strncpy(ed.filename, newPath, sizeof(ed.filename) - 1);
         ed.filename[sizeof(ed.filename) - 1] = '\0';
