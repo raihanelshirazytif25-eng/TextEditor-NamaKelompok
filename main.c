@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//global file from editor.h
+Buffer buf;
 Editor ed;
 
 
@@ -19,7 +19,6 @@ int main(int argc, char *argv[]){
     style &= ~WS_SIZEBOX;      
     style &= ~WS_MAXIMIZEBOX;  
     SetWindowLong(hwnd, GWL_STYLE, style);
-    ed.lastSave = time(NULL);
     initBuffer();
 
     if(argc > 1) {

@@ -1,8 +1,4 @@
 ﻿*.o
 *.exe
 *.layout
-<<<<<<< HEAD
-*.o
-=======
 Makefile.win
->>>>>>> 41f9c211fbf861f4623f8d18eecd25a54ff6f62e

@@ -2,9 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 void initBuffer(void){
-	
+	buf.totalLines  = 1;
+    buf.lineLen[0]  = 0;
+    buf.data[0][0]  = '\0';
 }
 
 void insertCharAt(int row, int col, char c){
@@ -85,8 +86,4 @@ void scrollView(void){
     if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
     if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
         ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
-}
-
-void freeBuffer(void){
-	
 }
