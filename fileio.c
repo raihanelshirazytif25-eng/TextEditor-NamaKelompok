@@ -108,6 +108,7 @@ int renameCurrentFile(const char *newPath) {
     if (ed.modified) {
         if (!saveFile(ed.filename)) return 0;
     }
+    remove(newPath);
     if (rename(ed.filename, newPath) == 0) {
         strncpy(ed.filename, newPath, sizeof(ed.filename) - 1);
         ed.filename[sizeof(ed.filename) - 1] = '\0';

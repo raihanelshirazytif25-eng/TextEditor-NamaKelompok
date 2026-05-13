@@ -66,7 +66,6 @@ int mergeLines(int row){
     return 1;
 }
 
-//memecah syncCursor menjadi dua for being modular able
 void validateCursor(void){
     if (ed.curRow < 0) ed.curRow = 0;
     if (ed.curRow >= buf.totalLines) ed.curRow = buf.totalLines - 1;
@@ -77,12 +76,10 @@ void validateCursor(void){
 }
 
 void scrollView(void){
-    //vertical scroll
     if (ed.curRow < ed.viewRow) ed.viewRow = ed.curRow;
     if (ed.curRow >= ed.viewRow + VISIBLE_ROWS) 
         ed.viewRow = ed.curRow - VISIBLE_ROWS + 1;
     
-    //horizontal scroll
     if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
     if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
         ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
