@@ -1,24 +1,21 @@
+#include "display.h"
+#include "fileio.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <conio.h>
-#include <windows.h>
-#include "display.h"
-#include "buffer.h"
-#include "fileio.h"
 
 void moveCursorTo(int row, int col) {
-    COORD c = {(SHORT)col, (SHORT)row};
-    SetConsoleCursorPosition(ed.hConsole, c);
+    printf("\033[%d;%dH", row + 1, col + 1); //Mindahin Kursor Terminal ini
 }
 
-void setColor(int fg, int bg) {
-    SetConsoleTextAttribute(ed.hConsole, (WORD)(bg << 4 | fg));
+void clearTerminal(void) {
+	printf("\033[2J"); // clear screen
+	printf("\033[3J"); // clear scrollback buffer
+	printf("\033[H");  // cursor ke home
 }
 
-void resetColor(void) {
-    SetConsoleTextAttribute(ed.hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-}
+
 
 void handleNavigation(int key) {
     int oldRow = ed.curRow;
@@ -119,12 +116,21 @@ int readKey(void) {
     if (c == 0 || c == 224) {
         int c2 = _getch();
         switch (c2) {
-            case 72: return 1000; case 80: return 1001; case 75: return 1002; case 77: return 1003;
-            case 71: return 1004; case 79: return 1005; case 83: return 1010;
-        }
-    }
+            case 72: return KEY_UP;
+            case 80: return KEY_DOWN;
+            case 75: return KEY_LEFT;
+            case 77: return KEY_RIGHT;
+            case 71: return KEY_HOME;
+            case 79: return KEY_END;
+            case 73: return KEY_PGUP;
+            case 81: return KEY_PGDN;
+            case 83: return KEY_DEL;
+            default: return -1;
+    	}
     return c;
+	}
 }
+
 
 void showPrompt(const char *msg, char *out, int maxLen) {
     moveCursorTo(VISIBLE_ROWS, 0);
