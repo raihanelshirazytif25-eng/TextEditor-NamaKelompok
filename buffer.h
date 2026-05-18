@@ -1,5 +1,33 @@
-#ifndef TEXTEDITOR_NAMAKELOMPOK_BUFFER_H
-#define TEXTEDITOR_NAMAKELOMPOK_BUFFER_H
+#ifndef BUFFER_H
+#define BUFFER_H
+
+typedef struct Node {
+    char *text;
+    int len;
+    int capacity;
+    struct Node *prev;
+    struct Node *next;
+} Node;
+
+typedef struct {
+    Node *head;
+    Node *tail;
+    
+    Node *curNode;      
+    Node *viewTop;      
+
+    int curCol;
+    int curRow;
+    int viewCol;
+    int viewRow;
+    
+    int totalLines;
+    int modified;
+    int readOnly;
+    char filename[260];
+} Editor;
+
+extern Editor ed;
 
 void initBuffer(void);
 
@@ -15,4 +43,4 @@ void validateCursor(void);
 
 void scrollView(void);
 
-#endif //TEXTEDITOR_NAMAKELOMPOK_BUFFER_H
+#endif
