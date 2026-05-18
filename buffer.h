@@ -43,4 +43,6 @@ void validateCursor(void);
 
 void scrollView(void);
 
+void freeBuffer(void);
+
 #endif

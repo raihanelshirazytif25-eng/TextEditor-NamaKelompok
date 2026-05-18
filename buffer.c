@@ -1,11 +1,30 @@
-#include "editor.h"
 #include "buffer.h"
+#include <stdlib.h>
 #include <string.h>
 
-void initBuffer(void){
-    buf.totalLines  = 1;
-    buf.lineLen[0]  = 0;
-    buf.data[0][0]  = '\0';	
+static Node* createNode(void) {
+    Node *newNode = (Node*)malloc(sizeof(Node));
+    if (!newNode) exit(1);
+    newNode->capacity = 64; 
+    newNode->text = (char*)malloc(newNode->capacity);
+    newNode->text[0] = '\0';
+    newNode->len = 0;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void initBuffer(void) {
+    ed.head = createNode();
+    ed.tail = ed.head;
+    ed.curNode = ed.head;
+    ed.viewTop = ed.head;
+    
+    ed.curCol = 0; ed.curRow = 0;
+    ed.viewCol = 0; ed.viewRow = 0;
+    ed.totalLines = 1;
+    ed.modified = 0;
+    ed.filename[0] = '\0';
 }
 
 void insertCharAt(int row, int col, char c){
@@ -86,4 +105,14 @@ void scrollView(void){
     if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
     if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
         ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
+}
+
+void freeBuffer(void) {
+    Node *curr = ed.head;
+    while (curr) {
+        Node *temp = curr;
+        curr = curr->next;
+        free(temp->text);
+        free(temp);
+    }
 }
