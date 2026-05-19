@@ -6,50 +6,50 @@
 #include <string.h>
 
 int checkFileStatus(const char *path) {
-    DWORD attr = GetFileAttributesA(path);
-    if (attr == INVALID_FILE_ATTRIBUTES) return -1;
-    if (attr & FILE_ATTRIBUTE_READONLY) return 2;
+    FILE *fp = fopen(path, "r");
+    if (!fp) return -1; 
+    fclose(fp);
+    fp = fopen(path, "r+");
+    if (!fp) return 2; 
+    fclose(fp);
     return 1;
 }
 
 int openFile(const char *path) {
     if (!path || path[0] == '\0') return 0;
+    
     int status = checkFileStatus(path);
     if (status == -1) {
+        freeBuffer();
         initBuffer();
-        strncpy(ed.filename, path, sizeof(ed.filename) - 1);
-		ed.filename[sizeof(ed.filename) - 1] = '\0';
+        strncpy(ed.filename, path, 259);
+        ed.filename[259] = '\0';
         ed.modified = 0; ed.readOnly = 0;
         return 1;
     }
+    
     ed.readOnly = (status == 2) ? 1 : 0;
     FILE *fp = fopen(path, "rb");
     if (!fp) return 0;
+
+    freeBuffer(); 
     initBuffer();
-    int row = 0, col = 0;
+    strncpy(ed.filename, path, 259);
+    ed.filename[259] = '\0';
+    
     int ch;
-    while ((ch = fgetc(fp)) != EOF && row < MAX_ROWS) {
+    while ((ch = fgetc(fp)) != EOF) {
         if (ch == '\r') continue;
-        if (ch == '\n') {
-            buf.lineLen[row] = col; 
-            buf.data[row][col] = '\0';
-            row++; 
-            col = 0;
-        } else if (col < MAX_COLS - 1) {
-            buf.data[row][col++] = (char)ch;
-        }
-    }
-    if (row < MAX_ROWS) {
-        buf.lineLen[row] = col; 
-        buf.data[row][col] = '\0';
-        buf.totalLines = (row == 0 && col == 0) ? 1 : row + 1;
-    } else {
-        buf.totalLines = MAX_ROWS;
+        if (ch == '\n') insertNewLine(); 
+        else insertCharAt((char)ch);
     }
     fclose(fp);
-    strncpy(ed.filename, path, sizeof(ed.filename) - 1);
-	ed.filename[sizeof(ed.filename) - 1] = '\0';
-    ed.modified = 0; ed.curRow = 0; ed.curCol = 0; ed.viewRow = 0; ed.viewCol = 0;
+    
+    ed.curNode = ed.head;
+    ed.viewTop = ed.head;
+    ed.curRow = 0; ed.curCol = 0; 
+    ed.viewRow = 0; ed.viewCol = 0;
+    ed.modified = 0;
     return 1;
 }
 
@@ -77,9 +77,10 @@ int saveFile(const char *path) {
 }
 
 void exitManager(void) {
-    setTerminalMode(0);
     clearTerminal();
-    printf("Editor ditutup.\n");
+    freeBuffer(); 
+    printf("Selesai mengedit, dealokasi memori\n");
+    exit(0);
 }
 
 long getFileSize(const char *path) {
@@ -94,13 +95,7 @@ long getFileSize(const char *path) {
 
 int saveAsFile(const char *newPath) {
     if (!newPath || newPath[0] == '\0') return 0;
-    FILE *fp = fopen(newPath, "wb");
-    if (!fp) return 0;
-    fclose(fp); 
-    strncpy(ed.filename, newPath, sizeof(ed.filename) - 1);
-    ed.filename[sizeof(ed.filename) - 1] = '\0';
-    ed.readOnly = 0; 
-    return saveFile(ed.filename);
+    return saveFile(newPath);
 }
 
 int renameCurrentFile(const char *newPath) {

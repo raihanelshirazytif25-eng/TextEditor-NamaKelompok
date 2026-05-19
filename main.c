@@ -4,9 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-Buffer buf;
-Editor ed;
-
 
 int main(int argc, char *argv[]){ 
     initBuffer();
@@ -14,11 +11,8 @@ int main(int argc, char *argv[]){
     if(argc > 1) {
         openFile(argv[1]);
     }
-    
-    setTerminalMode(1);
-    clearTerminal();
-    drawScreen(); 
 
+    drawScreen(); 
 
     int running = 1;
     while (running){
