@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static Node* createNode(void) {
+Node* createNode(void) {
     Node *newNode = (Node*)malloc(sizeof(Node));
     if (!newNode) exit(1);
     newNode->capacity = 64; 
