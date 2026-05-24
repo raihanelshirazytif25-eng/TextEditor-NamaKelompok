@@ -29,6 +29,8 @@ typedef struct {
 
 extern Editor ed;
 
+Node* createNode(void);
+
 void initBuffer(void);
 
 void insertCharAt(int row, int col, char c);
