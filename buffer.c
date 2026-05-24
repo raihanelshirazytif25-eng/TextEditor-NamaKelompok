@@ -2,11 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-<<<<<<< Updated upstream
-static Node* createNode(void) {
-=======
 Node* createNode(void) {
->>>>>>> Stashed changes
     Node *newNode = (Node*)malloc(sizeof(Node));
     if (!newNode) exit(1);
     newNode->capacity = 64; 
