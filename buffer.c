@@ -28,17 +28,27 @@ void initBuffer(void) {
 }
 
 void insertCharAt(char c){
-
+    Node *curr = ed.curNode;
+    if (curr->len + 1 >= curr->capacity) {
+        curr->capacity *= 2;
+        curr->text = (char*)realloc(curr->text, curr->capacity);
+    }
+    memmove(&curr->text[ed.curCol + 1], &curr->text[ed.curCol], curr->len - ed.curCol);
+    curr->text[ed.curCol] = c;
+    curr->len++;
+    curr->text[curr->len] = '\0';
+    ed.curCol++;
+    ed.modified = 1;	
 }
 
-void deleteCharAt(int row, int col){
-//    if (row < 0 || row >= buf.totalLines) return;
-//    if (col < 0 || col >= buf.lineLen[row]) return;
-//    int len = buf.lineLen[row];
-//    memmove(&buf.data[row][col], &buf.data[row][col + 1], len - col);
-//    buf.lineLen[row]--;
-//    buf.data[row][buf.lineLen[row]] = '\0';
-//    ed.modified = 1;
+void deleteCharAt(void){
+    Node *curr = ed.curNode;
+    if (ed.curCol == 0) return;
+    ed.curCol--;
+    memmove(&curr->text[ed.curCol], &curr->text[ed.curCol + 1], curr->len - ed.curCol);
+    curr->len--;
+    curr->text[curr->len] = '\0';
+    ed.modified = 1;
 }
 
 int insertNewLine(int row, int col){
@@ -76,12 +86,8 @@ int mergeLines(int row){
 }
 
 void validateCursor(void){
-//    if (ed.curRow < 0) ed.curRow = 0;
-//    if (ed.curRow >= buf.totalLines) ed.curRow = buf.totalLines - 1;
-//    
-//    int maxCol = buf.lineLen[ed.curRow];
-//    if (ed.curCol < 0) ed.curCol = 0;
-//    if (ed.curCol > maxCol) ed.curCol = maxCol;
+    if (ed.curCol < 0) ed.curCol = 0;
+    if (ed.curCol > ed.curNode->len) ed.curCol = ed.curNode->len;
 }
 
 void scrollView(void){
