@@ -75,7 +75,6 @@ int mergeLines(int row){
 //    return 1;
 }
 
-//memecah syncCursor menjadi dua for being modular able
 void validateCursor(void){
 //    if (ed.curRow < 0) ed.curRow = 0;
 //    if (ed.curRow >= buf.totalLines) ed.curRow = buf.totalLines - 1;
