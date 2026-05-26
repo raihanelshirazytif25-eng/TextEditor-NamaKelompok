@@ -15,86 +15,12 @@ void clearTerminal(void) {
 	printf("\033[H");  // cursor ke home
 }
 
-
-
-/* void handleNavigation(int key) {
-    int oldRow = ed.curRow;
-    switch(key) {
-        case 1000: ed.curRow--; break;
-        case 1001: ed.curRow++; break;
-        case 1002: if (ed.curCol > 0) ed.curCol--; else if (ed.curRow > 0) { ed.curRow--; ed.curCol = buf.lineLen[ed.curRow]; } break;
-        case 1003: if (ed.curCol < buf.lineLen[ed.curRow]) ed.curCol++; else if (ed.curRow < buf.totalLines - 1) { ed.curRow++; ed.curCol = 0; } break;
-        case 1004: ed.curCol = 0; break;
-        case 1005: ed.curCol = buf.lineLen[ed.curRow]; break;
-    }
-    validateCursor();
-    scrollView();
-} */
-
-/* void drawRow(int screenRow, int bufRow) {
+void drawLineNumbers(int screenRow, int bufRow) {
     moveCursorTo(screenRow, 0);
+    if (bufRow == ed.curRow) printf("\033[1;36m%4d |\033[0m ", bufRow + 1); 
+    else printf("%4d | ", bufRow + 1);
+}
 
-    if (bufRow >= buf.totalLines) {
-        setColor(8, 0); printf("    ~ "); resetColor();
-        COORD pos = {LINE_NUM_WIDTH, (SHORT)screenRow}; DWORD written;
-        FillConsoleOutputCharacter(ed.hConsole, ' ', VISIBLE_COLS - LINE_NUM_WIDTH, pos, &written);
-        return;
-    }
-
-    drawLineNumbers(screenRow, bufRow);
-    moveCursorTo(screenRow, LINE_NUM_WIDTH);
-    setColor(7, 0);
-
-    for (int c = 0; c < VISIBLE_COLS - LINE_NUM_WIDTH; c++) {
-        int idx = ed.viewCol + c;
-        if (idx < buf.lineLen[bufRow]) {
-            char ch = buf.data[bufRow][idx];
-            putchar(ch >= 32 && ch < 127 ? ch : ' ');
-        } else {
-            putchar(' ');
-        }
-    }
-    resetColor();
-} */
-
-/*void drawScreen(void) {
-    CONSOLE_CURSOR_INFO cci;
-    GetConsoleCursorInfo(ed.hConsole, &cci);
-    cci.bVisible = FALSE;
-    SetConsoleCursorInfo(ed.hConsole, &cci);
-
-    for (int sr = 0; sr < VISIBLE_ROWS; sr++) {
-        drawRow(sr, ed.viewRow + sr);
-    }
-
-    drawStatusBar();
-    moveCursorTo(ed.curRow - ed.viewRow, LINE_NUM_WIDTH + (ed.curCol - ed.viewCol));
-    cci.bVisible = TRUE;
-    SetConsoleCursorInfo(ed.hConsole, &cci);
-} */
-
-/* void drawLineNumbers(int screenRow, int bufRow) {
-    moveCursorTo(screenRow, 0);
-    if (bufRow == ed.curRow) setColor(15, 0);
-    else setColor(8, 0);
-    printf("%4d ", bufRow + 1);
-    resetColor();
-} */
-
-/* void drawCurrentLine(void) {
-    CONSOLE_CURSOR_INFO cci;
-    GetConsoleCursorInfo(ed.hConsole, &cci);
-    cci.bVisible = FALSE;
-    SetConsoleCursorInfo(ed.hConsole, &cci);
-
-
-    drawRow(ed.curRow - ed.viewRow, ed.curRow);
-    drawStatusBar(); 
-
-    moveCursorTo(ed.curRow - ed.viewRow, LINE_NUM_WIDTH + (ed.curCol - ed.viewCol));
-    cci.bVisible = TRUE;
-    SetConsoleCursorInfo(ed.hConsole, &cci);
-} */
 
 void drawStatusBar(void) {
     moveCursorTo(23, 0);
@@ -106,6 +32,16 @@ void drawStatusBar(void) {
     }
     
     //Tinggal penampilan teks
+    printf(" File: %s %s %s | Size: %ld bytes | Ln %d, Col %d | ^O=Open ^S=Save ^R=Rename ^Q=Quit ", 
+    ed.filename[0] == '\0' ? "[Untitled]" : ed.filename,
+    ed.modified ? "[*]" : "",
+    ed.readOnly ? "[RO]" : "",
+    size,
+    ed.curRow + 1, 
+    ed.curCol + 1);
+        
+    for(int i = 0; i < 15; i++) printf(" "); 
+}
 }
 
 
