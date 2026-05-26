@@ -17,7 +17,7 @@ void clearTerminal(void) {
 
 
 
-void handleNavigation(int key) {
+/* void handleNavigation(int key) {
     int oldRow = ed.curRow;
     switch(key) {
         case 1000: ed.curRow--; break;
@@ -29,9 +29,9 @@ void handleNavigation(int key) {
     }
     validateCursor();
     scrollView();
-}
+} */
 
-void drawRow(int screenRow, int bufRow) {
+/* void drawRow(int screenRow, int bufRow) {
     moveCursorTo(screenRow, 0);
 
     if (bufRow >= buf.totalLines) {
@@ -55,9 +55,9 @@ void drawRow(int screenRow, int bufRow) {
         }
     }
     resetColor();
-}
+} */
 
-void drawScreen(void) {
+/*void drawScreen(void) {
     CONSOLE_CURSOR_INFO cci;
     GetConsoleCursorInfo(ed.hConsole, &cci);
     cci.bVisible = FALSE;
@@ -71,17 +71,17 @@ void drawScreen(void) {
     moveCursorTo(ed.curRow - ed.viewRow, LINE_NUM_WIDTH + (ed.curCol - ed.viewCol));
     cci.bVisible = TRUE;
     SetConsoleCursorInfo(ed.hConsole, &cci);
-}
+} */
 
-void drawLineNumbers(int screenRow, int bufRow) {
+/* void drawLineNumbers(int screenRow, int bufRow) {
     moveCursorTo(screenRow, 0);
     if (bufRow == ed.curRow) setColor(15, 0);
     else setColor(8, 0);
     printf("%4d ", bufRow + 1);
     resetColor();
-}
+} */
 
-void drawCurrentLine(void) {
+/* void drawCurrentLine(void) {
     CONSOLE_CURSOR_INFO cci;
     GetConsoleCursorInfo(ed.hConsole, &cci);
     cci.bVisible = FALSE;
@@ -94,29 +94,27 @@ void drawCurrentLine(void) {
     moveCursorTo(ed.curRow - ed.viewRow, LINE_NUM_WIDTH + (ed.curCol - ed.viewCol));
     cci.bVisible = TRUE;
     SetConsoleCursorInfo(ed.hConsole, &cci);
-}
+} */
 
 void drawStatusBar(void) {
-    moveCursorTo(VISIBLE_ROWS, 0);
-    setColor(7, 0);
-    char left[100], right[60], bar[VISIBLE_COLS + 1];
-    long size = (ed.filename[0] != '\0') ? getFileSize(ed.filename) : 0;
-    snprintf(left, 100, " %s%s%s | %ld bytes ", ed.filename[0] ? ed.filename : "[Untitled]", ed.modified ? " [*]" : "", ed.readOnly ? " [RO]" : "", size);
-    snprintf(right, 60, " Ln %d, Col %d | ^O=Open ^S=Save ^R=Rename ^Q=Quit ", ed.curRow+1, ed.curCol+1);
-    memset(bar, ' ', VISIBLE_COLS); bar[VISIBLE_COLS] = '\0';
-    memcpy(bar, left, strlen(left));
-    memcpy(bar + (VISIBLE_COLS - strlen(right)), right, strlen(right));
-    printf("%.*s", VISIBLE_COLS, bar);
-    resetColor();
+    moveCursorTo(23, 0);
+    long size;
+    if (ed.filename[0] != '\0') {
+        size = getFileSize(ed.filename);
+    } else {
+        size = 0;
+    }
+    
+    //Tinggal penampilan teks
 }
 
 
 int readKey(void) {
-    int c = _getch();
-    if (c == 0 || c == 224) {
-        int c2 = _getch();
-        switch (c2) {
-            case 72: return KEY_UP;
+    int Key = _getch();
+    if (Key == 0 || Key == 224) { // Cek apakah karakter special atau tidak
+        int SpecialKeys = _getch();
+        switch (SpecialKeys) {
+            case 72: return KEY_UP; //224 72 v 0 72
             case 80: return KEY_DOWN;
             case 75: return KEY_LEFT;
             case 77: return KEY_RIGHT;
@@ -127,34 +125,22 @@ int readKey(void) {
             case 83: return KEY_DEL;
             default: return -1;
     	}
-    return c;
 	}
+    return c;
 }
 
 
 void showPrompt(const char *msg, char *out, int maxLen) {
-    moveCursorTo(VISIBLE_ROWS, 0);
-    setColor(0, 11); printf("%-*s", VISIBLE_COLS, msg);
-    moveCursorTo(VISIBLE_ROWS, (int)strlen(msg));
-    setTerminalMode(0);
+    moveCursorTo(24, 0);
+    printf("%s", msg);
     if (fgets(out, maxLen, stdin)) {
         out[strcspn(out, "\n")] = 0;
     }
-    setTerminalMode(1); resetColor();
 }
 
-void clearTerminal(void) {
-    COORD coordScreen = {0, 0};
-    DWORD charsWritten;
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    GetConsoleScreenBufferInfo(ed.hConsole, &csbi);
-    DWORD dwConSize = csbi.dwSize.X * csbi.dwSize.Y;
-    FillConsoleOutputCharacter(ed.hConsole, ' ', dwConSize, coordScreen, &charsWritten);
-    FillConsoleOutputAttribute(ed.hConsole, csbi.wAttributes, dwConSize, coordScreen, &charsWritten);
-    SetConsoleCursorPosition(ed.hConsole, coordScreen);
-}
 
-void setTerminalMode(int raw) {
+
+/* void setTerminalMode(int raw) {
     HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
     if (raw) {
         GetConsoleMode(hIn, &ed.oldConsoleMode);
@@ -162,5 +148,5 @@ void setTerminalMode(int raw) {
     } else {
         SetConsoleMode(hIn, ed.oldConsoleMode);
     }
-}
+} */
 
