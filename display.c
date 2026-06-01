@@ -42,7 +42,8 @@ void drawStatusBar(void) {
         
     for(int i = 0; i < 15; i++) printf(" "); 
 }
-}
+
+
 
 
 int readKey(void) {
@@ -75,14 +76,4 @@ void showPrompt(const char *msg, char *out, int maxLen) {
 }
 
 
-
-/* void setTerminalMode(int raw) {
-    HANDLE hIn = GetStdHandle(STD_INPUT_HANDLE);
-    if (raw) {
-        GetConsoleMode(hIn, &ed.oldConsoleMode);
-        SetConsoleMode(hIn, ed.oldConsoleMode & ~(ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT));
-    } else {
-        SetConsoleMode(hIn, ed.oldConsoleMode);
-    }
-} */
 
