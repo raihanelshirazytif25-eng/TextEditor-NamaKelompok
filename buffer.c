@@ -51,21 +51,35 @@ void deleteCharAt(void){
     ed.modified = 1;
 }
 
-int insertNewLine(int row, int col){
-//    if (buf.totalLines >= MAX_ROWS || row < 0 || row >= buf.totalLines) return 0;
-//    for (int i = buf.totalLines; i > row + 1; i--){
-//        memcpy(buf.data[i], buf.data[i - 1], buf.lineLen[i - 1] + 1);
-//        buf.lineLen[i] = buf.lineLen[i - 1];
-//    }
-//    int tailLen = buf.lineLen[row] - col;
-//    memcpy(buf.data[row + 1], &buf.data[row][col], tailLen);
-//    buf.data[row + 1][tailLen] = '\0';
-//    buf.lineLen[row + 1] = tailLen;
-//    buf.data[row][col] = '\0';
-//    buf.lineLen[row] = col;
-//    buf.totalLines++;
-//    ed.modified = 1;
-//    return 1;
+int insertNewLine(void){
+    Node *curr = ed.curNode;
+    Node *newNode = createNode();
+    int tailLen = curr->len - ed.curCol;
+
+    if (tailLen > 0) {
+        if (tailLen + 1 > newNode->capacity) {
+            newNode->capacity = tailLen + 1;
+            newNode->text = (char*)realloc(newNode->text, newNode->capacity);
+        }
+        memcpy(newNode->text, &curr->text[ed.curCol], tailLen);
+        newNode->len = tailLen;
+        newNode->text[newNode->len] = '\0';
+        curr->len = ed.curCol;
+        curr->text[curr->len] = '\0';
+    }
+
+    newNode->prev = curr;
+    newNode->next = curr->next;
+    if (curr->next) curr->next->prev = newNode;
+    else ed.tail = newNode;
+    curr->next = newNode;
+
+    ed.curNode = newNode;
+    ed.curRow++;
+    ed.curCol = 0;
+    ed.totalLines++;
+    ed.modified = 1;
+    return 1;
 }
 
 int mergeLines(int row){
