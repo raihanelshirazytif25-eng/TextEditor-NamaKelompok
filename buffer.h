@@ -33,13 +33,13 @@ Node* createNode(void);
 
 void initBuffer(void);
 
-void insertCharAt(int row, int col, char c);
+void insertCharAt(char c);
 
-void deleteCharAt(int row, int col);
+void deleteCharAt(void);
 
-int insertNewLine(int row, int col);
+int insertNewLine(void);
 
-int mergeLines(int row);
+int mergeLines(void);
 
 void validateCursor(void);
 
