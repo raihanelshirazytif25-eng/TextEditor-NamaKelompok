@@ -21,6 +21,54 @@ void drawLineNumbers(int screenRow, int bufRow) {
     else printf("%4d | ", bufRow + 1);
 }
 
+void drawScreen(void) {
+    printf("\033[?25l"); 
+    clearTerminal();
+    
+    Node *renderNode = ed.viewTop;
+    int bufRow = ed.viewRow;
+    
+    for (int sr = 0; sr < 22; sr++) {
+        if (renderNode) {
+            drawLineNumbers(sr, bufRow);
+            for(int j = 0; j < 74; j++) {
+                int idx = ed.viewCol + j;
+                if (idx < renderNode->len) putchar(renderNode->text[idx]);
+                else putchar(' '); 
+            }
+            printf("\n");
+            renderNode = renderNode->next;
+            bufRow++;
+        } else {
+
+            printf("   ~ |                                                                          \n");
+        }
+    }
+    drawStatusBar();
+    moveCursorTo(ed.curRow - ed.viewRow, ed.curCol - ed.viewCol + 7);
+    printf("\033[?25h"); 
+    fflush(stdout);     
+}
+
+void drawCurrentLine(void) {
+    int screenRow = ed.curRow - ed.viewRow;
+    if (screenRow < 0 || screenRow >= 22) return; 
+
+    printf("\033[?25l"); 
+    drawLineNumbers(screenRow, ed.curRow);
+    moveCursorTo(screenRow, 7); 
+    
+    for(int j = 0; j < 74; j++) {
+        int idx = ed.viewCol + j;
+        if (idx < ed.curNode->len) putchar(ed.curNode->text[idx]);
+        else putchar(' ');
+    }
+    
+    drawStatusBar();
+    moveCursorTo(screenRow, ed.curCol - ed.viewCol + 7);
+    printf("\033[?25h"); 
+    fflush(stdout);
+}
 
 void drawStatusBar(void) {
     moveCursorTo(23, 0);
@@ -42,7 +90,8 @@ void drawStatusBar(void) {
         
     for(int i = 0; i < 15; i++) printf(" "); 
 }
-}
+
+
 
 
 int readKey(void) {
