@@ -1,38 +1,35 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#define VISIBLE_ROWS    22
-#define VISIBLE_COLS    80
-#define LINE_NUM_WIDTH  5
-#define STATUS_BAR_ROW  24
-
-typedef struct Node{
-    char  *text;
-    int   len;
-    int   capacity;
+typedef struct Node {
+    char *text;
+    int len;
+    int capacity;
     struct Node *prev;
     struct Node *next;
 } Node;
 
 typedef struct {
-	Node *head;
-	Node *tail;
-	
-	Node *curNode;
-	Node *viewNode;
-	
-    int   curRow;
-    int   curCol;
-    int   viewRow;
-    int   viewCol;
+    Node *head;
+    Node *tail;
     
-    int   modified;
-    int   totalLines;
-    char  filename[260];
+    Node *curNode;      
+    Node *viewTop;      
+
+    int curCol;
+    int curRow;
+    int viewCol;
+    int viewRow;
     
+    int totalLines;
+    int modified;
+    int readOnly;
+    char filename[260];
 } Editor;
 
 extern Editor ed;
+
+Node* createNode(void);
 
 void initBuffer(void);
 
@@ -50,4 +47,4 @@ void scrollView(void);
 
 void freeBuffer(void);
 
-#endif 
+#endif

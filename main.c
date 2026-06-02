@@ -1,36 +1,32 @@
+#include "editor.h"
 #include "buffer.h"
 #include "fileio.h"
 #include "display.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+<<<<<<< HEAD
+=======
 //global file from editor.h
+Buffer buf;
 Editor ed;
 
+>>>>>>> buffer-dinamis
 
 int main(int argc, char *argv[]){ 
-    memset(&ed, 0, sizeof(ed));
-    ed.hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    
-    SMALL_RECT windowSize = {0, 0, VISIBLE_COLS - 1, STATUS_BAR_ROW};
-    SetConsoleWindowInfo(ed.hConsole, TRUE, &windowSize);
-	HWND hwnd = GetConsoleWindow();
-	DWORD style = GetWindowLong(hwnd, GWL_STYLE);
-    style &= ~WS_SIZEBOX;      
-    style &= ~WS_MAXIMIZEBOX;  
-    SetWindowLong(hwnd, GWL_STYLE, style);
-    ed.lastSave = time(NULL);
     initBuffer();
 
     if(argc > 1) {
         openFile(argv[1]);
     }
+<<<<<<< HEAD
+
+    drawScreen(); 
+
+=======
     
-    setTerminalMode(1);
-    clearTerminal();
     drawScreen(); //full render for the frsit time
-
-
+>>>>>>> buffer-dinamis
     int running = 1;
     while (running){
         
@@ -124,4 +120,9 @@ int main(int argc, char *argv[]){
     exitManager();
 
     return 0;
+    
+*/
+
+
+
 }
