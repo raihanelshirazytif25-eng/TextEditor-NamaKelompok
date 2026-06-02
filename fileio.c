@@ -54,33 +54,26 @@ int openFile(const char *path) {
 }
 
 int saveFile(const char *path) {
-    if (!path || path[0] == '\0' || ed.readOnly) return 0;
-    FILE *fp = fopen(path, "wb");
-    if (!fp) return 0;
-    for (int i = 0; i < buf.totalLines; i++) {
-        if (buf.lineLen[i] > 0) {
-            if (fwrite(buf.data[i], 1, buf.lineLen[i], fp) != (size_t)buf.lineLen[i]) {
-                fclose(fp);
-                return 0; 
-            }
-        }
-        if (i < buf.totalLines - 1) { 
-            if (fputs("\r\n", fp) == EOF) {
-                fclose(fp);
-                return 0;
-            }
-        }
-    }
-    fclose(fp);
-    ed.modified = 0;
-    return 1;
-}
-
-void exitManager(void) {
-    clearTerminal();
-    freeBuffer(); 
-    printf("Selesai mengedit, dealokasi memori\n");
-    exit(0);
+//    if (!path || path[0] == '\0' || ed.readOnly) return 0;
+//    FILE *fp = fopen(path, "wb");
+//    if (!fp) return 0;
+//    for (int i = 0; i < buf.totalLines; i++) {
+//        if (buf.lineLen[i] > 0) {
+//            if (fwrite(buf.data[i], 1, buf.lineLen[i], fp) != (size_t)buf.lineLen[i]) {
+//                fclose(fp);
+//                return 0; 
+//            }
+//        }
+//        if (i < buf.totalLines - 1) { 
+//            if (fputs("\r\n", fp) == EOF) {
+//                fclose(fp);
+//                return 0;
+//            }
+//        }
+//    }
+//    fclose(fp);
+//    ed.modified = 0;
+//    return 1;
 }
 
 long getFileSize(const char *path) {
@@ -99,15 +92,22 @@ int saveAsFile(const char *newPath) {
 }
 
 int renameCurrentFile(const char *newPath) {
-    if (ed.filename[0] == '\0' || !newPath || newPath[0] == '\0') return 0;
-    if (ed.modified) {
-        if (!saveFile(ed.filename)) return 0;
-    }
-    remove(newPath);
-    if (rename(ed.filename, newPath) == 0) {
-        strncpy(ed.filename, newPath, sizeof(ed.filename) - 1);
-        ed.filename[sizeof(ed.filename) - 1] = '\0';
-        return 1;
-    }
-    return 0; 
+//    if (ed.filename[0] == '\0' || !newPath || newPath[0] == '\0') return 0;
+//    if (ed.modified) {
+//        if (!saveFile(ed.filename)) return 0;
+//    }
+//    remove(newPath);
+//    if (rename(ed.filename, newPath) == 0) {
+//        strncpy(ed.filename, newPath, sizeof(ed.filename) - 1);
+//        ed.filename[sizeof(ed.filename) - 1] = '\0';
+//        return 1;
+//    }
+//    return 0; 
+}
+
+void exitManager(void) {
+    clearTerminal();
+    freeBuffer(); 
+    printf("Selesai mengedit, dealokasi memori\n");
+    exit(0);
 }
