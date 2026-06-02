@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+Editor ed;
+
 Node* createNode(void) {
     Node *newNode = (Node*)malloc(sizeof(Node));
     if (!newNode) exit(1);
@@ -20,8 +22,10 @@ void initBuffer(void) {
     ed.curNode = ed.head;
     ed.viewTop = ed.head;
     
-    ed.curCol = 0; ed.curRow = 0;
-    ed.viewCol = 0; ed.viewRow = 0;
+    ed.curCol = 0; 
+	ed.curRow = 0;
+    ed.viewCol = 0; 
+	ed.viewRow = 0;
     ed.totalLines = 1;
     ed.modified = 0;
     ed.filename[0] = '\0';
