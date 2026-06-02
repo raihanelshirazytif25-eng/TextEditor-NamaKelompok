@@ -1,77 +1,89 @@
 #include "display.h"
-#include "fileio.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <conio.h>
+#include <string.h>
 
-void moveCursorTo(int row, int col) {
-    printf("\033[%d;%dH", row + 1, col + 1); //Mindahin Kursor Terminal ini
+void pindahPosisiUI(int x, int y) {
+    printf("\033[%d;%dH", y + 1, x + 1);
 }
 
-void clearTerminal(void) {
-	printf("\033[2J"); // clear screen
-	printf("\033[3J"); // clear scrollback buffer
-	printf("\033[H");  // cursor ke home
+void hapusLayarCMD(void) {
+    system("cls"); 
 }
 
 void drawLineNumbers(int screenRow, int bufRow) {
-    moveCursorTo(screenRow, 0);
+    moveCursorTo(screenRow, 0);	 
     if (bufRow == ed.curRow) printf("\033[1;36m%4d |\033[0m ", bufRow + 1); 
     else printf("%4d | ", bufRow + 1);
 }
 
 
-void drawStatusBar(void) {
-    moveCursorTo(23, 0);
-    long size;
-    if (ed.filename[0] != '\0') {
-        size = getFileSize(ed.filename);
-    } else {
-        size = 0;
+void perbaruiLayarUtuh(void) {
+    hapusLayarCMD(); 
+    
+    BarisTeks *nodeRender = editor.nodeLayarAtas;
+    int nomorBaris = editor.layarY + 1;
+    
+
+    for (int i = 0; i < 22; i++) {
+        if (nodeRender != NULL) {
+            printf("%4d | ", nomorBaris);
+
+            for(int j = 0; j < 74; j++) { 
+                int indexTeks = editor.layarX + j;
+                if (indexTeks < nodeRender->panjangTeks) {
+                    putchar(nodeRender->isiTeks[indexTeks]);
+                } else {
+                    break;
+                }
+            }
+            printf("\n");
+            
+            nodeRender = nodeRender->bawah;
+            nomorBaris++;
+        } else {
+            printf("   ~ |\n"); 
+        }
     }
     
-    //Tinggal penampilan teks
-    printf(" File: %s %s %s | Size: %ld bytes | Ln %d, Col %d | ^O=Open ^S=Save ^R=Rename ^Q=Quit ", 
-    ed.filename[0] == '\0' ? "[Untitled]" : ed.filename,
-    ed.modified ? "[*]" : "",
-    ed.readOnly ? "[RO]" : "",
-    size,
-    ed.curRow + 1, 
-    ed.curCol + 1);
-        
-    for(int i = 0; i < 15; i++) printf(" "); 
+    gambarInfoBawah();
+    pindahPosisiUI(editor.kursorX - editor.layarX + 7, editor.kursorY - editor.layarY); 
+}
+
+void drawStatusBar(void) {
+void gambarInfoBawah(void) {
+    pindahPosisiUI(0, 23); // Baris status bar di bawah
+    printf("===============================================================================\n");
+    printf(" File: %s %s | Baris: %d, Kolom: %d | ^S=Save ^Q=Quit", 
+        editor.namaFile[0] == '\0' ? "[Tanpa Nama]" : editor.namaFile,
+        editor.belumDisave ? "[*]" : "",
+        editor.kursorY + 1, 
+        editor.kursorX + 1);
 }
 
 
 
 
-int readKey(void) {
-    int Key = _getch();
-    if (Key == 0 || Key == 224) { // Cek apakah karakter special atau tidak
-        int SpecialKeys = _getch();
-        switch (SpecialKeys) {
-            case 72: return KEY_UP; //224 72 v 0 72
-            case 80: return KEY_DOWN;
-            case 75: return KEY_LEFT;
-            case 77: return KEY_RIGHT;
-            case 71: return KEY_HOME;
-            case 79: return KEY_END;
-            case 73: return KEY_PGUP;
-            case 81: return KEY_PGDN;
-            case 83: return KEY_DEL;
-            default: return -1;
-    	}
-	}
-    return c;
+int tangkapTombol(void) {
+    int tombol = _getch();
+    if (tombol == 0 || tombol == 224) {
+        int arah = _getch();
+        if (arah == 72) return 1000; // Atas
+        if (arah == 80) return 1001; // Bawah
+        if (arah == 75) return 1002; // Kiri
+        if (arah == 77) return 1003; // Kanan
+        if (arah == 83) return 1010; // Tombol Delete
+    }
+    return tombol;
 }
 
 
-void showPrompt(const char *msg, char *out, int maxLen) {
-    moveCursorTo(24, 0);
-    printf("%s", msg);
-    if (fgets(out, maxLen, stdin)) {
-        out[strcspn(out, "\n")] = 0;
+void mintaInputUser(const char *pesan, char *output, int maksimal) {
+    pindahPosisiUI(0, 24); 
+    printf("%s", pesan);
+    if (fgets(output, maksimal, stdin)) {
+        output[strcspn(output, "\n")] = 0; 
     }
 }
 
