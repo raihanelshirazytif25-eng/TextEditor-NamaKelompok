@@ -1,17 +1,9 @@
-#include "editor.h"
 #include "buffer.h"
 #include "fileio.h"
 #include "display.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-<<<<<<< HEAD
-=======
-//global file from editor.h
-Buffer buf;
-Editor ed;
-
->>>>>>> buffer-dinamis
 
 int main(int argc, char *argv[]){ 
     initBuffer();
@@ -19,14 +11,9 @@ int main(int argc, char *argv[]){
     if(argc > 1) {
         openFile(argv[1]);
     }
-<<<<<<< HEAD
 
     drawScreen(); 
-
-=======
     
-    drawScreen(); //full render for the frsit time
->>>>>>> buffer-dinamis
     int running = 1;
     while (running){
         
