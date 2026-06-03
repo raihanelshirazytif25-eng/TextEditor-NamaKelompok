@@ -1,6 +1,10 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
+#define VISIBLE_ROWS 22
+#define VISIBLE_COLS 75
+#define MAX_CAPACITY 64
+
 typedef struct Node {
     char *text;
     int len;
