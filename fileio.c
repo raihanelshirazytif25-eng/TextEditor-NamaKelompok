@@ -54,26 +54,25 @@ int openFile(const char *path) {
 }
 
 int saveFile(const char *path) {
-//    if (!path || path[0] == '\0' || ed.readOnly) return 0;
-//    FILE *fp = fopen(path, "wb");
-//    if (!fp) return 0;
-//    for (int i = 0; i < buf.totalLines; i++) {
-//        if (buf.lineLen[i] > 0) {
-//            if (fwrite(buf.data[i], 1, buf.lineLen[i], fp) != (size_t)buf.lineLen[i]) {
-//                fclose(fp);
-//                return 0; 
-//            }
-//        }
-//        if (i < buf.totalLines - 1) { 
-//            if (fputs("\r\n", fp) == EOF) {
-//                fclose(fp);
-//                return 0;
-//            }
-//        }
-//    }
-//    fclose(fp);
-//    ed.modified = 0;
-//    return 1;
+    if (!path || path[0] == '\0' || ed.readOnly) return 0;
+    FILE *fp = fopen(path, "wb");
+    if (!fp) return 0;
+
+    Node *curr = ed.head;
+    while (curr) {
+        if (curr->len > 0) fwrite(curr->text, 1, curr->len, fp);
+        if (curr->next) fputs("\r\n", fp);
+        curr = curr->next;
+    }
+    
+    fclose(fp);
+    ed.modified = 0;
+    
+    if (strcmp(ed.filename, path) != 0) {
+        strncpy(ed.filename, path, 259);
+        ed.filename[259] = '\0';
+    }
+    return 1;
 }
 
 long getFileSize(const char *path) {
