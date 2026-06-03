@@ -64,14 +64,15 @@ int main(int argc, char *argv[]){
 //        else if (key == 17){
 //            running = 0; 
 //        }
-//        else if (key == 15) { 
-//            char targetName[260];
-//            showPrompt(" Buka file: ", targetName, sizeof(targetName));
-//            if (targetName[0] != '\0') {
-//                openFile(targetName);
-//                oldViewRow = -1; 
-//            }
-//        }
+	else if (key == 15) { 
+            char targetName[260];
+            showPrompt(" Open file: ", targetName, sizeof(targetName));
+            if (targetName[0] != '\0') {
+                if (openFile(targetName)){
+                    structureChanged = 1; 
+                }
+            }
+        }
 //        else if (key == 19){
 //            char tempName[260];
 //            if (ed.filename[0] == '\0'){
@@ -131,6 +132,9 @@ int main(int argc, char *argv[]){
 //            }
 //            oldViewRow = -1; 
 //        }
+    else if (key == 17) {
+       running = 0;
+	}
 //        else if (key == 13){
 //            if (insertNewLine(ed.curRow, ed.curCol)){
 //                ed.curRow++; 
