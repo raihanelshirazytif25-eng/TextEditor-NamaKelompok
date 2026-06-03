@@ -7,7 +7,7 @@ Editor ed;
 Node* createNode(void) {
     Node *newNode = (Node*)malloc(sizeof(Node));
     if (!newNode) exit(1);
-    newNode->capacity = 64; 
+    newNode->capacity = MAX_CAPACITY; 
     newNode->text = (char*)malloc(newNode->capacity);
     newNode->text[0] = '\0';
     newNode->len = 0;
@@ -19,7 +19,7 @@ Node* createNode(void) {
 void initBuffer(void) {
     ed.head = createNode();
     ed.tail = ed.head;
-    ed.curNode = ed.head;
+    ed.currNode = ed.head;
     ed.viewTop = ed.head;
     
     ed.curCol = 0; 
@@ -32,7 +32,7 @@ void initBuffer(void) {
 }
 
 void insertCharAt(char c){
-    Node *curr = ed.curNode;
+    Node *curr = ed.currNode;
     if (curr->len + 1 >= curr->capacity) {
         curr->capacity *= 2;
         curr->text = (char*)realloc(curr->text, curr->capacity);
@@ -46,7 +46,7 @@ void insertCharAt(char c){
 }
 
 void deleteCharAt(void){
-    Node *curr = ed.curNode;
+    Node *curr = ed.currNode;
     if (ed.curCol == 0) return;
     ed.curCol--;
     memmove(&curr->text[ed.curCol], &curr->text[ed.curCol + 1], curr->len - ed.curCol);
@@ -56,7 +56,7 @@ void deleteCharAt(void){
 }
 
 int insertNewLine(void){
-    Node *curr = ed.curNode;
+    Node *curr = ed.currNode;
     Node *newNode = createNode();
     int tailLen = curr->len - ed.curCol;
 
@@ -87,20 +87,34 @@ int insertNewLine(void){
 }
 
 int mergeLines(int row){
-//    if (row < 0 || row >= buf.totalLines - 1) return 0;
-//    int lenA = buf.lineLen[row];
-//    int lenB = buf.lineLen[row + 1];
-//    if (lenA + lenB >= MAX_COLS - 1) return 0;
-//    memcpy(&buf.data[row][lenA], buf.data[row + 1], lenB);
-//    buf.lineLen[row] = lenA + lenB;
-//    buf.data[row][buf.lineLen[row]] = '\0';
-//    for (int i = row + 1; i < buf.totalLines - 1; i++){
-//        memcpy(buf.data[i], buf.data[i + 1], buf.lineLen[i + 1] + 1);
-//        buf.lineLen[i] = buf.lineLen[i + 1];
-//    }
-//    buf.totalLines--;
-//    ed.modified = 1;
-//    return 1;
+    Node *curr = ed.currNode;
+    if (!curr->prev) return 0;
+    
+    Node *upNode = curr->prev;
+    int oldCol = upNode->len;
+    
+    if (upNode->len + curr->len + 1 > upNode->capacity) {
+        upNode->capacity = upNode->len + curr->len + 1;
+        upNode->text = (char*)realloc(upNode->text, upNode->capacity);
+    }
+    
+    memcpy(&upNode->text[upNode->len], curr->text, curr->len);
+    upNode->len += curr->len;
+    upNode->text[upNode->len] = '\0';
+    
+    upNode->next = curr->next;
+    if (curr->next) curr->next->prev = upNode;
+    else ed.tail = upNode;
+    
+    free(curr->text);
+    free(curr);
+    
+    ed.curNode = upNode;
+    ed.curRow--;
+    ed.curCol = oldCol;
+    ed.totalLines--;
+    ed.modified = 1;
+    return 1;
 }
 
 void validateCursor(void){
@@ -109,15 +123,22 @@ void validateCursor(void){
 }
 
 void scrollView(void){
-//    //vertical scroll
-//    if (ed.curRow < ed.viewRow) ed.viewRow = ed.curRow;
-//    if (ed.curRow >= ed.viewRow + VISIBLE_ROWS) 
-//        ed.viewRow = ed.curRow - VISIBLE_ROWS + 1;
-//    
-//    //horizontal scroll
-//    if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
-//    if (ed.curCol >= ed.viewCol + (VISIBLE_COLS - LINE_NUM_WIDTH))
-//        ed.viewCol = ed.curCol - (VISIBLE_COLS - LINE_NUM_WIDTH) + 1;
+	//vertikal
+    while (ed.curRow < ed.viewRow) {
+        if (ed.viewTop->prev){
+	        ed.viewTop = ed.viewTop->prev;
+	        ed.viewRow--;	
+		}
+    }
+    while (ed.curRow >= ed.viewRow + VISIBLE_ROWS) { 
+        if (ed.viewTop->next){
+        	ed.viewTop = ed.viewTop->next;
+        	ed.viewRow++;
+		}
+    }
+    //hori...miya
+    if (ed.curCol < ed.viewCol) ed.viewCol = ed.curCol;
+    if (ed.curCol >= ed.viewCol + VISIBLE_COLS) ed.viewCol = ed.curCol - VISIBLE_COLS + 1;
 }
 
 void freeBuffer(void) {
