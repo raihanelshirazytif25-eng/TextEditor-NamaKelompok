@@ -91,17 +91,24 @@ int saveAsFile(const char *newPath) {
 }
 
 int renameCurrentFile(const char *newPath) {
-//    if (ed.filename[0] == '\0' || !newPath || newPath[0] == '\0') return 0;
-//    if (ed.modified) {
-//        if (!saveFile(ed.filename)) return 0;
-//    }
-//    remove(newPath);
-//    if (rename(ed.filename, newPath) == 0) {
-//        strncpy(ed.filename, newPath, sizeof(ed.filename) - 1);
-//        ed.filename[sizeof(ed.filename) - 1] = '\0';
-//        return 1;
-//    }
-//    return 0; 
+	if (!newPath || newPath[0] == '\0') return 0;
+	
+    if (ed.filename[0] == '\0') {
+        return saveFile(newPath);
+    }
+    
+    if (ed.modified) {
+        if (!saveFile(ed.filename)) return 0;
+    }
+    
+    remove(newPath);
+    
+    if (rename(ed.filename, newPath) == 0) {
+        strncpy(ed.filename, newPath, 259);
+        ed.filename[259] = '\0';
+        return 1;
+    }
+    return 0; 
 }
 
 void exitManager(void) {

@@ -132,6 +132,9 @@ int main(int argc, char *argv[]){
 //            }
 //            oldViewRow = -1; 
 //        }
+    else if (key == 17) {
+       running = 0;
+	}
 //        else if (key == 13){
 //            if (insertNewLine(ed.curRow, ed.curCol)){
 //                ed.curRow++; 
