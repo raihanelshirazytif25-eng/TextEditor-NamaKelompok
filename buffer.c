@@ -19,7 +19,7 @@ Node* createNode(void) {
 void initBuffer(void) {
     ed.head = createNode();
     ed.tail = ed.head;
-    ed.curNode = ed.head;
+    ed.currNode = ed.head;
     ed.viewTop = ed.head;
     
     ed.curCol = 0; 
@@ -32,7 +32,7 @@ void initBuffer(void) {
 }
 
 void insertCharAt(char c){
-    Node *curr = ed.curNode;
+    Node *curr = ed.currNode;
     if (curr->len + 1 >= curr->capacity) {
         curr->capacity *= 2;
         curr->text = (char*)realloc(curr->text, curr->capacity);
@@ -46,7 +46,7 @@ void insertCharAt(char c){
 }
 
 void deleteCharAt(void){
-    Node *curr = ed.curNode;
+    Node *curr = ed.currNode;
     if (ed.curCol == 0) return;
     ed.curCol--;
     memmove(&curr->text[ed.curCol], &curr->text[ed.curCol + 1], curr->len - ed.curCol);
@@ -56,7 +56,7 @@ void deleteCharAt(void){
 }
 
 int insertNewLine(void){
-    Node *curr = ed.curNode;
+    Node *curr = ed.currNode;
     Node *newNode = createNode();
     int tailLen = curr->len - ed.curCol;
 
@@ -87,7 +87,7 @@ int insertNewLine(void){
 }
 
 int mergeLines(int row){
-    Node *curr = ed.curNode;
+    Node *curr = ed.currNode;
     if (!curr->prev) return 0;
     
     Node *upNode = curr->prev;

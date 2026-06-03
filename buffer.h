@@ -17,7 +17,7 @@ typedef struct {
     Node *head;
     Node *tail;
     
-    Node *curNode;      
+    Node *currNode;      
     Node *viewTop;      
 
     int curCol;
