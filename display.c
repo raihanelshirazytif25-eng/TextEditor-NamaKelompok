@@ -103,15 +103,10 @@ int readKey(void) {
             case 80: return KEY_DOWN;
             case 75: return KEY_LEFT;
             case 77: return KEY_RIGHT;
-            case 71: return KEY_HOME;
-            case 79: return KEY_END;
-            case 73: return KEY_PGUP;
-            case 81: return KEY_PGDN;
-            case 83: return KEY_DEL;
             default: return -1;
     	}
 	}
-    return c;
+    return Key;
 }
 
 
