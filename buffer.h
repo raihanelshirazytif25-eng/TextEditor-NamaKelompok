@@ -39,7 +39,7 @@ void initBuffer(void);
 
 void insertCharAt(char c);
 
-void deleteCharAt(void);
+int deleteCharAt(void);
 
 int insertNewLine(void);
 
@@ -50,5 +50,10 @@ void validateCursor(void);
 void scrollView(void);
 
 void freeBuffer(void);
+
+int moveUp(void);
+int moveDown(void);
+int moveLeft(void);
+int moveRight(void);
 
 #endif

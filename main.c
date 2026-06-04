@@ -10,9 +10,7 @@
 
 
 int main(int argc, char *argv[]){ 
-
     initBuffer();
-
     drawScreen();
 
     int running = 1;
@@ -20,33 +18,27 @@ int main(int argc, char *argv[]){
 	    int oldViewRow = ed.viewRow;
         int oldViewCol = ed.viewCol;
         int lineChanged = 0;
-        
         int key = readKey();
         
     if (key == KEY_UP) { // Up
-    	lineChanged = 1;
+    	lineChanged = moveUp();
 	}
-	
 	else if (key == KEY_DOWN) { // Down
-		lineChanged = 1;	
-        }
-
+		lineChanged = moveDown();	
+    }
     else if (key == KEY_LEFT) { // Left
-        lineChanged = 1;
-        
+        lineChanged = moveLeft(); 
     }
-   
 	else if (key == KEY_RIGHT) { // Right
-        lineChanged = 1;
+        lineChanged = moveRight();
     }
-	
 	else if (key == KEY_ENTER) { // Enter
-        insertNewLine();
-        lineChanged = 1;
+        lineChanged = insertNewLine();
     }
-	
 	else if (key == KEY_BACKSPACE) { // Backspace
-		lineChanged = 1;
+		if (!deleteCharAt()) {
+		    lineChanged = mergeLines();
+		}
     }
 		    
 	else if (key == KEY_CTRL_O) { // Ctrl + O
@@ -67,10 +59,12 @@ int main(int argc, char *argv[]){
         insertCharAt((char)key);
 	}
 	
-	if (ed.viewRow != oldViewRow || ed.viewCol != oldViewCol || structureChanged) {
+	validateCursor();
+    scrollView();
+	
+	if (ed.viewRow != oldViewRow || ed.viewCol != oldViewCol || lineChanged) {
     	drawScreen();
-    } 
-	else {
+    }else{
         drawCurrentLine(); 
     }
 }
