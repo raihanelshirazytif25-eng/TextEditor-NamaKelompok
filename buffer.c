@@ -45,14 +45,17 @@ void insertCharAt(char c){
     ed.modified = 1;	
 }
 
-void deleteCharAt(void){
+int deleteCharAt(void){
     Node *curr = ed.currNode;
-    if (ed.curCol == 0) return;
+    if (ed.curCol == 0){
+    	return 0;
+	}
     ed.curCol--;
     memmove(&curr->text[ed.curCol], &curr->text[ed.curCol + 1], curr->len - ed.curCol);
     curr->len--;
     curr->text[curr->len] = '\0';
     ed.modified = 1;
+    return 1;
 }
 
 int insertNewLine(void){
@@ -88,7 +91,9 @@ int insertNewLine(void){
 
 int mergeLines(){
     Node *curr = ed.currNode;
-    if (!curr->prev) return 0;
+    if (!curr->prev){
+    	return 0;
+	}
     
     Node *upNode = curr->prev;
     int oldCol = upNode->len;

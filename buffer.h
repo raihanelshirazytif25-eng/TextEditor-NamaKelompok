@@ -39,7 +39,7 @@ void initBuffer(void);
 
 void insertCharAt(char c);
 
-void deleteCharAt(void);
+int deleteCharAt(void);
 
 int insertNewLine(void);
 
