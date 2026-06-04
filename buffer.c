@@ -78,7 +78,7 @@ int insertNewLine(void){
     else ed.tail = newNode;
     curr->next = newNode;
 
-    ed.curNode = newNode;
+    ed.currNode = newNode;
     ed.curRow++;
     ed.curCol = 0;
     ed.totalLines++;
@@ -86,7 +86,7 @@ int insertNewLine(void){
     return 1;
 }
 
-int mergeLines(int row){
+int mergeLines(){
     Node *curr = ed.currNode;
     if (!curr->prev) return 0;
     
@@ -109,7 +109,7 @@ int mergeLines(int row){
     free(curr->text);
     free(curr);
     
-    ed.curNode = upNode;
+    ed.currNode = upNode;
     ed.curRow--;
     ed.curCol = oldCol;
     ed.totalLines--;
@@ -119,7 +119,7 @@ int mergeLines(int row){
 
 void validateCursor(void){
     if (ed.curCol < 0) ed.curCol = 0;
-    if (ed.curCol > ed.curNode->len) ed.curCol = ed.curNode->len;
+    if (ed.curCol > ed.currNode->len) ed.curCol = ed.currNode->len;
 }
 
 void scrollView(void){
@@ -148,5 +148,44 @@ void freeBuffer(void) {
         curr = curr->next;
         free(temp->text);
         free(temp);
+    }
+}
+
+int moveUp(void){
+	if (ed.curRow > 0 && ed.currNode->prev) {
+	    ed.currNode = ed.currNode->prev;
+	    ed.curRow--;
+	    return 1;
+    }
+}
+int moveDown(void){
+    if (ed.curRow < ed.totalLines - 1 && ed.currNode->next) {
+    	ed.currNode = ed.currNode->next;
+    	ed.curRow++;
+        return 1;
+    }
+}
+int moveLeft(void){
+    if (ed.curCol > 0){
+    	ed.curCol--;
+    	return 0;
+	}
+    else if(ed.curRow > 0) {
+        ed.currNode = ed.currNode->prev;
+        ed.curRow--;
+        ed.curCol = ed.currNode->len;
+        return 1;
+    }
+}
+int moveRight(void){
+    if (ed.curCol < ed.currNode->len){
+    	ed.curCol++;
+    	return 0;
+	}
+    else if (ed.curRow < ed.totalLines - 1) {
+        ed.currNode = ed.currNode->next;
+        ed.curRow++;
+        ed.curCol = 0;
+        return 1;
     }
 }

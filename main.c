@@ -24,27 +24,21 @@ int main(int argc, char *argv[]){
         int key = readKey();
         
     if (key == KEY_UP) { // Up
-    	lineChanged = 1;
+    	lineChanged = moveUp();
 	}
-	
 	else if (key == KEY_DOWN) { // Down
-		lineChanged = 1;	
+		lineChanged = moveDown();	
         }
-
     else if (key == KEY_LEFT) { // Left
-        lineChanged = 1;
-        
+        lineChanged = moveLeft(); 
     }
-   
 	else if (key == KEY_RIGHT) { // Right
-        lineChanged = 1;
+        lineChanged = moveRight();
     }
-	
 	else if (key == KEY_ENTER) { // Enter
         insertNewLine();
         lineChanged = 1;
     }
-	
 	else if (key == KEY_BACKSPACE) { // Backspace
 		lineChanged = 1;
     }
@@ -67,7 +61,7 @@ int main(int argc, char *argv[]){
         insertCharAt((char)key);
 	}
 	
-	if (ed.viewRow != oldViewRow || ed.viewCol != oldViewCol || structureChanged) {
+	if (ed.viewRow != oldViewRow || ed.viewCol != oldViewCol || lineChanged) {
     	drawScreen();
     } 
 	else {

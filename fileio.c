@@ -45,7 +45,7 @@ int openFile(const char *path) {
     }
     fclose(fp);
     
-    ed.curNode = ed.head;
+    ed.currNode = ed.head;
     ed.viewTop = ed.head;
     ed.curRow = 0; ed.curCol = 0; 
     ed.viewRow = 0; ed.viewCol = 0;

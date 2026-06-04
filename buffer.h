@@ -51,4 +51,9 @@ void scrollView(void);
 
 void freeBuffer(void);
 
+int moveUp(void);
+int moveDown(void);
+int moveLeft(void);
+int moveRight(void);
+
 #endif
