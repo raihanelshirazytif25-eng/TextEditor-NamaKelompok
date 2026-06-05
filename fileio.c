@@ -45,7 +45,7 @@ int openFile(const char *path) {
     }
     fclose(fp);
     
-    ed.curNode = ed.head;
+    ed.currNode = ed.head;
     ed.viewTop = ed.head;
     ed.curRow = 0; ed.curCol = 0; 
     ed.viewRow = 0; ed.viewCol = 0;
@@ -109,6 +109,18 @@ int renameCurrentFile(const char *newPath) {
         return 1;
     }
     return 0; 
+}
+
+void ensureTxtExtension(char *filename, int maxLen) {
+    if (filename[0] == '\0') return;
+    
+    char *ext = strrchr(filename, '.');
+
+    if (!ext || strcmp(ext, ".txt") != 0) {
+        if (strlen(filename) + 4 < maxLen) {
+            strcat(filename, ".txt");
+        }
+    }
 }
 
 void exitManager(void) {

@@ -89,7 +89,7 @@ int insertNewLine(void){
     return 1;
 }
 
-int mergeLines(){
+int mergeLines(void){
     Node *curr = ed.currNode;
     if (!curr->prev){
     	return 0;
@@ -162,6 +162,7 @@ int moveUp(void){
 	    ed.curRow--;
 	    return 1;
     }
+    return 0;
 }
 int moveDown(void){
     if (ed.curRow < ed.totalLines - 1 && ed.currNode->next) {
@@ -169,6 +170,7 @@ int moveDown(void){
     	ed.curRow++;
         return 1;
     }
+    return 0;
 }
 int moveLeft(void){
     if (ed.curCol > 0){
@@ -181,6 +183,7 @@ int moveLeft(void){
         ed.curCol = ed.currNode->len;
         return 1;
     }
+    return 0;
 }
 int moveRight(void){
     if (ed.curCol < ed.currNode->len){
@@ -193,4 +196,5 @@ int moveRight(void){
         ed.curCol = 0;
         return 1;
     }
+    return 0;
 }
