@@ -60,7 +60,7 @@ void drawCurrentLine(void) {
     
     for(int j = 0; j < 74; j++) {
         int idx = ed.viewCol + j;
-        if (idx < ed.curNode->len) putchar(ed.curNode->text[idx]);
+        if (idx < ed.currNode->len) putchar(ed.currNode->text[idx]);
         else putchar(' ');
     }
     

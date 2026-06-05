@@ -5,10 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-//Buffer buf;
-//Editor ed;
-
-
 int main(int argc, char *argv[]){ 
     initBuffer();
     drawScreen();
@@ -21,16 +17,16 @@ int main(int argc, char *argv[]){
         int key = readKey();
         
     if (key == KEY_UP) { // Up
-    	lineChanged = moveUp();
+    	moveUp();
 	}
 	else if (key == KEY_DOWN) { // Down
-		lineChanged = moveDown();	
+		moveDown();	
     }
     else if (key == KEY_LEFT) { // Left
-        lineChanged = moveLeft(); 
+        moveLeft(); 
     }
 	else if (key == KEY_RIGHT) { // Right
-        lineChanged = moveRight();
+        moveRight();
     }
 	else if (key == KEY_ENTER) { // Enter
         lineChanged = insertNewLine();
@@ -42,18 +38,28 @@ int main(int argc, char *argv[]){
     }
 		    
 	else if (key == KEY_CTRL_O) { // Ctrl + O
+        int proceed = 1;
+        if (ed.modified) {
+            char konfirmasi[10];
+            showPrompt(" Pekerjaan belum disave! Buang perubahan? (y/n): ", konfirmasi, sizeof(konfirmasi));
+            if (konfirmasi[0] != 'y' && konfirmasi[0] != 'Y') proceed = 0;
+            lineChanged = 1; 
+        }
+        
+        if (proceed) {
             char targetName[260];
             showPrompt(" Open file: ", targetName, sizeof(targetName));
+            ensureTxtExtension(targetName, sizeof(targetName));
             if (targetName[0] != '\0') {
-                if (openFile(targetName)){
-                    lineChanged = 1; 
-                }
+                if (openFile(targetName)) lineChanged = 1; 
             }
         }
+    }
 
     else if (key == KEY_CTRL_R) { // Ctrl + R
             char newName[260];
-            showPrompt(" Rename file to (janlup '.txt' nya~): ", newName, sizeof(newName));
+            showPrompt(" Rename file to: ", newName, sizeof(newName));
+            ensureTxtExtension(newName, sizeof(newName));
             
             if (newName[0] != '\0') {
                 int status = checkFileStatus(newName); 
@@ -63,21 +69,66 @@ int main(int argc, char *argv[]){
                     showPrompt(" Nama file sudah dipakai! Timpa? (y/n): ", konfirmasi, sizeof(konfirmasi));
                     
                     if (konfirmasi[0] == 'y' || konfirmasi[0] == 'Y') {
-                        if (renameCurrentFile(newName)) structureChanged = 1;
+                        renameCurrentFile(newName);
                     } else {
                         showPrompt(" Rename dibatalkan. Tekan apa saja...", konfirmasi, 1);
                     }
                 } else {
-                    if (renameCurrentFile(newName)) structureChanged = 1;
+                    renameCurrentFile(newName);
                 }
             }
+            lineChanged = 1;
         }
-        
+       
+	       else if (key == KEY_CTRL_S) { // Ctrl + S
+            char tempName[260]; 
+            if (ed.filename[0] == '\0' || ed.readOnly) {
+                if (ed.readOnly) {
+                    showPrompt(" File Read-Only! Simpan file baru sebagai: ", tempName, sizeof(tempName));
+                } else {
+                    showPrompt(" Simpan sebagai: ", tempName, sizeof(tempName));
+                }
+                
+                ensureTxtExtension(tempName, sizeof(tempName)); 
+                
+                if (tempName[0] != '\0') {
+                    int status = checkFileStatus(tempName); 
+                    
+                    if (status == 1 || status == 2) { 
+                        char konfirmasi[10];
+                        showPrompt(" File sudah ada! Timpa? (y/n): ", konfirmasi, sizeof(konfirmasi));
+                        
+                        if (konfirmasi[0] == 'y' || konfirmasi[0] == 'Y') {
+                            int oldRO = ed.readOnly;
+                            ed.readOnly = 0; 
+                            if (!saveFile(tempName)) ed.readOnly = oldRO; 
+                        } else {
+                            showPrompt(" Simpan dibatalkan. Tekan apa saja...", konfirmasi, 1);
+                        }
+                    } else {
+                        int oldRO = ed.readOnly;
+                        ed.readOnly = 0;
+                        if (!saveFile(tempName)) ed.readOnly = oldRO;
+                    }
+                }
+            } else {
+                saveFile(ed.filename);
+            }
+            lineChanged = 1;
+        }
+	    
     else if (key == KEY_CTRL_Q) { //Ctrl + Q
-       running = 0;
+       if (ed.modified) {
+            char konfirmasi[10];
+            showPrompt(" Pekerjaan belum disave! Yakin keluar? (y/n): ", konfirmasi, sizeof(konfirmasi));
+            if (konfirmasi[0] == 'y' || konfirmasi[0] == 'Y') running = 0;
+            lineChanged = 1; 
+        } else {
+            running = 0;
+        }
 	}
 
-	else if (key >= 32 && key <= 126) { //Normal Key
+	else if (IS_PRINTABLE(key)) { //Normal Key
         insertCharAt((char)key);
 	}
 	
@@ -92,5 +143,4 @@ int main(int argc, char *argv[]){
 }
 
 	exitManager();
-    return 0;
 }

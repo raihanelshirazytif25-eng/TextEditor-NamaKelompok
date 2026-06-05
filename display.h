@@ -10,6 +10,7 @@
 #define KEY_CTRL_S   19
 #define KEY_CTRL_Q   17
 #define KEY_CTRL_R   18
+#define IS_PRINTABLE(c) ((c) >= 32 && (c) <= 126)
 #include "buffer.h"
 
 void drawScreen(void);
