@@ -51,6 +51,28 @@ int main(int argc, char *argv[]){
             }
         }
 
+    else if (key == KEY_CTRL_R) { // Ctrl + R
+            char newName[260];
+            showPrompt(" Rename file to (janlup '.txt' nya~): ", newName, sizeof(newName));
+            
+            if (newName[0] != '\0') {
+                int status = checkFileStatus(newName); 
+                
+                if (status == 1 || status == 2) {
+                    char konfirmasi[10];
+                    showPrompt(" Nama file sudah dipakai! Timpa? (y/n): ", konfirmasi, sizeof(konfirmasi));
+                    
+                    if (konfirmasi[0] == 'y' || konfirmasi[0] == 'Y') {
+                        if (renameCurrentFile(newName)) structureChanged = 1;
+                    } else {
+                        showPrompt(" Rename dibatalkan. Tekan apa saja...", konfirmasi, 1);
+                    }
+                } else {
+                    if (renameCurrentFile(newName)) structureChanged = 1;
+                }
+            }
+        }
+        
     else if (key == KEY_CTRL_Q) { //Ctrl + Q
        running = 0;
 	}
@@ -68,5 +90,7 @@ int main(int argc, char *argv[]){
         drawCurrentLine(); 
     }
 }
+
+	exitManager();
     return 0;
 }
