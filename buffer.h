@@ -1,51 +1,59 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
-#define MAX_ROWS        1024
-#define MAX_COLS        512
-#define VISIBLE_ROWS    22
-#define VISIBLE_COLS    80
-#define LINE_NUM_WIDTH  5
-#define STATUS_BAR_ROW  24
-#include <windows.h>
+#define VISIBLE_ROWS 22
+#define VISIBLE_COLS 75
+#define MAX_CAPACITY 64
+
+typedef struct Node {
+    char *text;
+    int len;
+    int capacity;
+    struct Node *prev;
+    struct Node *next;
+} Node;
 
 typedef struct {
-    char  data[MAX_ROWS][MAX_COLS];
-    int   lineLen[MAX_ROWS];
-    int   totalLines;
-} Buffer;
+    Node *head;
+    Node *tail;
+    
+    Node *currNode;      
+    Node *viewTop;      
 
-typedef struct {
-    int   curRow;
-    int   curCol;
-    int   viewRow;
-    int   viewCol;
+    int curCol;
+    int curRow;
+    int viewCol;
+    int viewRow;
     
-    int   modified;
-    int   totalLines;
-    char  filename[260];
-    int   readOnly;
-    
-    HANDLE hConsole;
-    CONSOLE_SCREEN_BUFFER_INFO cbi;
-    DWORD  oldConsoleMode;
+    int totalLines;
+    int modified;
+    int readOnly;
+    char filename[260];
 } Editor;
 
-extern Buffer buf;
 extern Editor ed;
+
+Node* createNode(void);
 
 void initBuffer(void);
 
-void insertCharAt(int row, int col, char c);
+void insertCharAt(char c);
 
-void deleteCharAt(int row, int col);
+int deleteCharAt(void);
 
-int insertNewLine(int row, int col);
+int insertNewLine(void);
 
-int mergeLines(int row);
+int mergeLines(void);
 
 void validateCursor(void);
 
 void scrollView(void);
 
-#endif 
+void freeBuffer(void);
+
+int moveUp(void);
+int moveDown(void);
+int moveLeft(void);
+int moveRight(void);
+
+#endif

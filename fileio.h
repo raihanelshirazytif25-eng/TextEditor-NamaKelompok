@@ -10,5 +10,6 @@ void exitManager(void);
 long getFileSize(const char *path); 
 int saveAsFile(const char *newPath); 
 int renameCurrentFile(const char *newPath); 
+void ensureTxtExtension(char *filename, int maxLen);
 
 #endif 
